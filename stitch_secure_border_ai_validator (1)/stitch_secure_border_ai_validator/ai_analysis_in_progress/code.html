@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Processing Document - Sentinel Oversight</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#08132a",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "surface-variant": "#2a344d",
+                        "on-tertiary-fixed-variant": "#005142",
+                        "tertiary-fixed-dim": "#38debb",
+                        "surface-container-high": "#1f2942",
+                        "surface-container": "#151f37",
+                        "on-background": "#d9e2ff",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed": "#d6e3ff",
+                        "inverse-surface": "#d9e2ff",
+                        "on-primary-fixed": "#0d1c32",
+                        "on-secondary-fixed": "#091b39",
+                        "tertiary-container": "#001e17",
+                        "primary": "#b9c7e4",
+                        "on-tertiary-container": "#00937a",
+                        "on-secondary-container": "#a5b5db",
+                        "inverse-primary": "#515f78",
+                        "on-primary": "#233148",
+                        "surface": "#08132a",
+                        "tertiary": "#38debb",
+                        "background": "#08132a",
+                        "on-error": "#690005",
+                        "on-surface": "#d9e2ff",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#5ffbd6",
+                        "surface-container-lowest": "#030d25",
+                        "secondary-fixed": "#d8e2ff",
+                        "surface-tint": "#b9c7e4",
+                        "outline-variant": "#44474d",
+                        "surface-bright": "#2f3952",
+                        "secondary-fixed-dim": "#b6c6ed",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#2a344d",
+                        "primary-container": "#0a192f",
+                        "on-tertiary-fixed": "#002019",
+                        "secondary-container": "#374767",
+                        "secondary": "#b6c6ed",
+                        "outline": "#8f9097",
+                        "surface-container-low": "#101b33",
+                        "on-surface-variant": "#c5c6cd",
+                        "inverse-on-surface": "#263049",
+                        "on-primary-fixed-variant": "#39475f",
+                        "on-secondary": "#20304f",
+                        "on-primary-container": "#74829d",
+                        "on-tertiary": "#00382d",
+                        "on-secondary-fixed-variant": "#374767"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin": "24px",
+                        "unit": "4px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "data-mono": ["JetBrains Mono", "monospace"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "data-mono": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    },
+                    "animation": {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scan-line': 'scan 3s linear infinite',
+                    },
+                    "keyframes": {
+                        scan: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-overlay {
+            background: linear-gradient(to bottom, transparent, rgba(56, 222, 187, 0.2), transparent);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md overflow-hidden">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface text-primary dark:text-primary-fixed-dim border-b border-outline-variant docked full-width top-0 z-10 flex flex-col">
+<div class="flex justify-between items-center w-full px-margin h-16">
+<div class="flex items-center gap-gutter">
+<span class="font-headline-md text-headline-md font-bold text-tertiary dark:text-tertiary-fixed">Sentinel Oversight</span>
+<div class="hidden md:flex gap-gutter ml-8">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Dashboard</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Logs</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-margin">
+<span class="font-label-caps text-label-caps text-on-surface hidden md:block border border-outline-variant px-3 py-1 rounded">Station ID: ALPHA-09</span>
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">security</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center p-margin relative overflow-hidden">
+<!-- Processing Container -->
+<div class="w-full max-w-md bg-surface-container border border-outline-variant rounded-lg p-margin relative z-10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+<!-- Graphic Area -->
+<div class="relative w-full h-48 bg-surface-dim rounded-lg border border-outline-variant overflow-hidden mb-8 flex items-center justify-center">
+<!-- Document Placeholder -->
+<div class="w-32 h-40 border-2 border-outline-variant rounded bg-surface-container-highest relative opacity-50">
+<div class="absolute top-4 left-4 right-4 h-2 bg-outline-variant rounded"></div>
+<div class="absolute top-8 left-4 right-8 h-2 bg-outline-variant rounded"></div>
+<div class="absolute top-16 left-4 right-4 h-16 bg-outline-variant rounded"></div>
+</div>
+<!-- Scanning Animation -->
+<div class="absolute inset-0 scan-overlay h-full w-full animate-scan-line"></div>
+<!-- Center Indicator -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<span class="material-symbols-outlined text-tertiary text-6xl animate-pulse-fast drop-shadow-[0_0_15px_rgba(56,222,187,0.5)]">document_scanner</span>
+</div>
+</div>
+<!-- Status Header -->
+<div class="text-center mb-8">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Processing Document</h2>
+<p class="font-data-mono text-data-mono text-on-surface-variant animate-pulse">System scanning document...</p>
+</div>
+<!-- Steps List -->
+<div class="space-y-4">
+<!-- Step 1: Active -->
+<div class="flex items-center gap-4 bg-surface p-4 rounded border border-tertiary/30">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary animate-spin text-sm" style="font-variation-settings: 'FILL' 0;">progress_activity</span>
+</div>
+<div class="flex-1">
+<span class="font-label-caps text-label-caps text-tertiary block">Extracting Text</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-[10px]">Analyzing data blocks...</span>
+</div>
+<span class="font-data-mono text-data-mono text-tertiary">42%</span>
+</div>
+<!-- Step 2: Pending -->
+<div class="flex items-center gap-4 bg-surface p-4 rounded border border-outline-variant opacity-60">
+<div class="w-8 h-8 rounded-full border border-outline flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-sm" style="font-variation-settings: 'FILL' 0;">pending</span>
+</div>
+<div class="flex-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant block">Validating Fields</span>
+<span class="font-data-mono text-data-mono text-outline text-[10px]">Awaiting extraction</span>
+</div>
+</div>
+<!-- Step 3: Pending -->
+<div class="flex items-center gap-4 bg-surface p-4 rounded border border-outline-variant opacity-60">
+<div class="w-8 h-8 rounded-full border border-outline flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-sm" style="font-variation-settings: 'FILL' 0;">pending</span>
+</div>
+<div class="flex-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant block">Generating Report</span>
+<span class="font-data-mono text-data-mono text-outline text-[10px]">Queued</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Background Grid -->
+<div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: linear-gradient(#44474d 1px, transparent 1px), linear-gradient(90deg, #44474d 1px, transparent 1px); background-size: 32px 32px;"></div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-dim dark:bg-surface-container-lowest text-tertiary dark:text-tertiary-fixed border-t border-outline-variant docked bottom-0 full-width z-50">
+<div class="flex justify-between items-center px-margin py-2 w-full">
+<span class="font-data-mono text-data-mono text-on-surface text-sm">© 2024 Sentinel Oversight AI</span>
+<div class="hidden sm:flex gap-margin">
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">AI Engine: Online</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">Database: Connected</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-xs">System Time: 14:22:01 UTC</span>
+</div>
+</div>
+</footer>
+</body></html>

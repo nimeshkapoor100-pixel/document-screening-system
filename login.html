@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Satark Sarthi - Officer Login</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols for icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brandDark: '#0A1120',
+            govNavy: '#0F172A',
+            govBlue: '#1E293B',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .light-security-grid {
+      background-color: #ffffff;
+      background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+      background-size: 24px 24px;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="light-security-grid text-slate-900 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 selection:bg-slate-900 selection:text-white relative">
+
+  <!-- Centered Login Card -->
+  <main class="w-full max-w-[430px] bg-white rounded-2xl shadow-[0_12px_40px_-10px_rgba(15,23,42,0.08),0_0_1px_1px_rgba(15,23,42,0.06)] border border-slate-200/90 p-8 sm:p-10 relative z-10 space-y-6">
+    
+    <!-- Header with Official Security Badge -->
+    <header class="flex flex-col items-center text-center space-y-3">
+      <!-- Security Emblem Badge -->
+      <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-white shadow-lg shadow-slate-900/10">
+        <span class="material-symbols-outlined text-3xl text-blue-400">shield_person</span>
+      </div>
+
+      <div class="space-y-2">
+        <!-- Top Govt Gateway Pill -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-slate-100 border border-slate-200 text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+          <span>Govt Gateway v2.4.1 &bull; SSB MHA</span>
+        </div>
+
+        <!-- Big, Prominent Project Brand Name -->
+        <h1 class="text-3xl sm:text-[32px] font-black tracking-tight text-slate-900">
+          Satark Sarthi
+        </h1>
+
+        <!-- Distinct Officer Login Badge -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 border border-blue-200/70 text-blue-800 text-xs font-bold">
+          <span class="material-symbols-outlined text-sm text-blue-600">badge</span>
+          <span>Officer Login &bull; Secure Terminal Authentication</span>
+        </div>
+
+        <p class="text-[12px] text-slate-500 max-w-xs mx-auto leading-relaxed pt-0.5">
+          AI-Based Fake Identity &amp; Document Screening System
+        </p>
+      </div>
+    </header>
+
+    <!-- Quick Demo Credentials Helper -->
+    <div class="rounded-xl bg-slate-50/90 border border-slate-200 p-2.5 flex items-center justify-between text-xs text-slate-600 shadow-2xs">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-slate-400 text-sm">vpn_key</span>
+        <span>Demo: <strong class="font-mono text-slate-800 font-semibold">SSB-88429-DEL</strong></span>
+      </div>
+      <button type="button" onclick="fillDemoCredentials()" class="text-[11px] font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer">
+        Auto Fill
+      </button>
+    </div>
+
+    <!-- Dynamic Error Alert Banner -->
+    <div id="authAlert" class="hidden rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800 flex items-start gap-2.5 transition-all">
+      <span class="material-symbols-outlined text-rose-600 text-base shrink-0 mt-0.5">error</span>
+      <div class="flex-1">
+        <span class="font-semibold block" id="alertTitle">Authentication Failed</span>
+        <p class="text-[11px] text-rose-600 mt-0.5" id="alertMessage">Please verify your Officer ID and password.</p>
+      </div>
+      <button type="button" onclick="hideAlert()" class="text-rose-400 hover:text-rose-700 cursor-pointer">
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>
+    </div>
+
+    <!-- Login Form (Only Officer ID & Password) -->
+    <form id="officerLoginForm" class="space-y-4" method="POST" action="/login">
+      <!-- Officer ID Input -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-semibold text-slate-700" for="officerId">Officer ID / Service Number</label>
+        <div class="relative">
+          <input 
+            class="w-full h-11 px-3.5 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all shadow-xs" 
+            id="officerId" 
+            name="officerId" 
+            placeholder="e.g. SSB-88429-DEL" 
+            required="" 
+            type="text" 
+            autocomplete="username"
+          />
+          <span class="material-symbols-outlined absolute right-3 top-3 text-slate-400 text-lg pointer-events-none">badge</span>
+        </div>
+      </div>
+
+      <!-- Password Input with Toggle -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-semibold text-slate-700" for="password">Password / Security PIN</label>
+        </div>
+        <div class="relative">
+          <input 
+            class="w-full h-11 px-3.5 pr-10 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all shadow-xs" 
+            id="password" 
+            name="password" 
+            placeholder="Enter password or token" 
+            required="" 
+            type="password" 
+            autocomplete="current-password"
+          />
+          <button 
+            aria-label="Toggle password visibility" 
+            class="absolute right-3 top-3 text-slate-400 hover:text-slate-700 focus:outline-none transition-colors cursor-pointer" 
+            onclick="togglePasswordVisibility()" 
+            type="button"
+          >
+            <span id="passwordToggleIcon" class="material-symbols-outlined text-lg">visibility</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Forgot Password Link -->
+      <div class="flex justify-end pt-0.5">
+        <a class="text-xs text-slate-500 hover:text-slate-900 hover:underline underline-offset-4 transition-colors cursor-pointer" href="#" onclick="alert('For security credential resets, contact the Checkpoint Duty Officer or System Administrator.'); return false;">
+          Forgot password?
+        </a>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        id="submitBtn" 
+        class="w-full h-11 bg-slate-900 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 active:scale-[0.99] transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md hover:shadow-slate-900/10 disabled:opacity-70 disabled:cursor-not-allowed" 
+        type="submit"
+      >
+        <span id="btnIcon" class="material-symbols-outlined text-base">login</span>
+        <span id="btnText">Login to Satark Sarthi Portal</span>
+      </button>
+    </form>
+
+    <!-- Card Security Banner Footer -->
+    <footer class="pt-3 border-t border-slate-100 text-center">
+      <div class="inline-flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-medium">
+        <span class="material-symbols-outlined text-xs text-slate-400">verified</span>
+        <span>Secure Terminal Session</span>
+        <span class="text-slate-300">&bull;</span>
+        <span>AES-256 Encrypted</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Legal Notice Outside Card -->
+  <p class="mt-6 text-center text-xs text-slate-400 max-w-sm leading-normal">
+    Authorized Law Enforcement &amp; Immigration Personnel Only &bull; Govt Gateway v2.4.1
+  </p>
+
+  <script>
+    function togglePasswordVisibility() {
+      const p = document.getElementById('password');
+      const icon = document.getElementById('passwordToggleIcon');
+      if (p.type === 'password') {
+        p.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        p.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function fillDemoCredentials() {
+      document.getElementById('officerId').value = 'SSB-88429-DEL';
+      document.getElementById('password').value = 'password123';
+      hideAlert();
+    }
+
+    function showAlert(message, title = 'Authentication Failed') {
+      const alertBox = document.getElementById('authAlert');
+      const alertTitle = document.getElementById('alertTitle');
+      const alertMsg = document.getElementById('alertMessage');
+      alertTitle.textContent = title;
+      alertMsg.textContent = message;
+      alertBox.classList.remove('hidden');
+    }
+
+    function hideAlert() {
+      const alertBox = document.getElementById('authAlert');
+      if (alertBox) alertBox.classList.add('hidden');
+    }
+
+    // Interactive AJAX submission with smooth feedback
+    document.getElementById('officerLoginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      hideAlert();
+
+      const officerId = document.getElementById('officerId').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!officerId || !password) {
+        showAlert('Officer ID and Password are required.');
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      const btnIcon = document.getElementById('btnIcon');
+      const btnText = document.getElementById('btnText');
+
+      btn.disabled = true;
+      btnIcon.classList.add('animate-spin');
+      btnIcon.textContent = 'progress_activity';
+      btnText.textContent = 'Authenticating Terminal...';
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            officerId: officerId,
+            password: password
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (response.ok && data.status === 'success') {
+          btnIcon.textContent = 'check_circle';
+          btnIcon.classList.remove('animate-spin');
+          btnText.textContent = 'Access Granted. Redirecting...';
+          
+          const redirectUrl = data.redirect || '/';
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 350);
+        } else {
+          showAlert(data.message || 'Authentication failed. Please verify Officer ID and password.');
+          btn.disabled = false;
+          btnIcon.classList.remove('animate-spin');
+          btnIcon.textContent = 'login';
+          btnText.textContent = 'Login to Satark Sarthi Portal';
+        }
+      } catch (err) {
+        console.error('AJAX login failed, falling back to standard POST:', err);
+        document.getElementById('officerLoginForm').submit();
+      }
+    });
+  </script>
+</body>
+</html>

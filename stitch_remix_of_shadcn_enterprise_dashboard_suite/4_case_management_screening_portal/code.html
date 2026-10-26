@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Case Management &amp; Flagged Detections - SSB / MHA</title>
+<!-- Load Tailwind CSS v3 with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Custom Tailwind Config to match crisp Shadcn aesthetic -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: '#e5e7eb',
+            input: '#e5e7eb',
+            background: '#f4f4f5',
+            foreground: '#09090b',
+            muted: '#71717a',
+            'muted-foreground': '#71717a',
+            card: '#ffffff',
+            sidebar: '#fbfbfb',
+            primary: '#18181b',
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars">
+    /* Subtle custom scrollbar for horizontal kanban scroll */
+    ::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d4d4d8;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a1a1aa;
+    }
+  </style>
+</head>
+<body class="bg-[#f4f4f6] text-zinc-900 font-sans antialiased min-h-screen flex flex-col">
+<!-- BEGIN: MainContainer -->
+<div class="flex flex-1 min-h-screen p-3 md:p-5 gap-5">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 flex-shrink-0 bg-transparent flex flex-col justify-between hidden lg:flex">
+<div>
+<!-- Logo and App Switcher -->
+<div class="flex items-center gap-2.5 px-2 py-3">
+<div class="w-7 h-7 bg-zinc-900 rounded-lg flex items-center justify-center text-white font-bold shadow-sm ring-1 ring-zinc-800">
+<svg class="w-4 h-4 text-amber-400" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-semibold text-sm tracking-tight text-zinc-900 leading-tight">SSB Screening</span>
+<span class="text-[10px] text-zinc-500 font-medium tracking-wide">Govt of India</span>
+</div>
+</div>
+<!-- Search input with shortcut -->
+<div class="mt-2 mb-4 px-1">
+<div class="relative flex items-center">
+<svg class="w-4 h-4 text-zinc-400 absolute left-3 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="w-full bg-white border border-zinc-200 text-xs rounded-lg pl-9 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-zinc-400 text-zinc-600 shadow-sm" placeholder="Quick Search..." readonly="" type="text"/>
+<span class="absolute right-2.5 text-[10px] bg-zinc-100 border border-zinc-200 text-zinc-400 font-medium px-1.5 py-0.5 rounded">⌘K</span>
+</div>
+</div>
+<!-- Navigation Section: Core Operations -->
+<div class="space-y-1">
+<p class="text-[11px] font-medium text-zinc-400 px-3 py-1 uppercase tracking-wider">Operations</p>
+<nav class="space-y-0.5 text-xs font-medium text-zinc-600">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-zinc-200/60 transition-colors" href="#">
+<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="18" rx="2" stroke-width="1.8" width="18" x="3" y="3"></rect><path d="M3 9h18M9 21V9" stroke-width="1.8"></path></svg>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-zinc-200/60 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 3H5a2 2 0 00-2 2v2m0 10v2a2 2 0 002 2h2m10-16h2a2 2 0 012 2v2m0 10v2a2 2 0 01-2 2h-2M9 12h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Scan Document</span>
+</div>
+<span class="text-[10px] bg-emerald-50 text-emerald-600 border border-emerald-200 font-semibold px-1.5 py-0.5 rounded-full">Live</span>
+</a>
+<!-- Active Category: Case Management -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg bg-zinc-200/60 text-zinc-900 font-semibold transition-colors" href="#">
+<div class="flex items-center gap-3">
+<svg class="w-4 h-4 text-zinc-900" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Case Management</span>
+</div>
+<span class="text-[10px] bg-rose-100 text-rose-700 font-semibold px-1.5 py-0.5 rounded-full">14</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-zinc-200/60 transition-colors" href="#">
+<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span>Analytics &amp; Audit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-zinc-200/60 transition-colors" href="#">
+<svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></circle></svg>
+<span>Admin Settings</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Border Security System Status Card -->
+<div class="p-3.5 bg-white rounded-xl border border-zinc-200 shadow-sm mt-6">
+<div class="flex items-center gap-2 mb-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<h4 class="text-xs font-semibold text-zinc-900">Border AI Gateway</h4>
+</div>
+<p class="text-[11px] leading-relaxed text-zinc-500 mb-3">Model v4.8 Active. Intercept stream connected to Central MHA Surveillance Grid.</p>
+<div class="flex items-center justify-between text-[11px] text-zinc-600 pt-2 border-t border-zinc-100">
+<span class="font-medium text-zinc-500">Latency</span>
+<span class="font-semibold text-zinc-800 font-mono">142ms</span>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: MainContentArea -->
+<div class="flex-1 bg-white rounded-2xl border border-zinc-200/80 shadow-sm flex flex-col overflow-hidden">
+<!-- BEGIN: TopBar -->
+<header class="h-14 border-b border-zinc-200 px-5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<!-- Sidebar toggle button -->
+<button class="text-zinc-600 hover:text-zinc-900 p-1 rounded hover:bg-zinc-100">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<rect height="18" rx="2" stroke-width="1.8" width="18" x="3" y="3"></rect>
+<path d="M9 3v18" stroke-width="1.8"></path>
+</svg>
+</button>
+<!-- Checkpoint Location Dropdown -->
+<button class="flex items-center gap-2 text-xs font-semibold text-zinc-800 hover:text-zinc-900 pl-1 py-1 pr-2 rounded-md hover:bg-zinc-50">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-emerald-100"></span>
+<span>Indo-Nepal Checkpoint (Raxaul)</span>
+<svg class="w-3.5 h-3.5 text-zinc-400 ml-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 9l4-4 4 4m0 6l-4 4-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- Top Right Actions -->
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 text-zinc-700 text-[11px] font-medium rounded-full border border-zinc-200">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
+<span>14 Intercepts In Queue</span>
+</div>
+<button class="text-zinc-600 hover:text-zinc-900 p-1 relative rounded-md hover:bg-zinc-100" title="Notifications">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+</button>
+<button class="text-zinc-600 hover:text-zinc-900 p-1 rounded-md hover:bg-zinc-100" title="Theme Toggle">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</button>
+<div class="h-4 w-px bg-zinc-200 mx-1"></div>
+<!-- Officer Profile -->
+<div class="flex items-center gap-2 pl-1 cursor-pointer">
+<div class="relative">
+<img alt="Insp. Rajesh Kumar" class="w-7 h-7 rounded-full object-cover border border-zinc-200 ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk4QEx5oZpoFV2taCVTkyra-TFXjJRABSMjmozKUFeV2RO7PSQrIhVDrTtHdH9zD1-acm4zqPO6aKxxGPCbgoZ2uFsrT_tTNp0qqhmBm_OuCKKaTLhpjCAJDtFOW_dcgKs5UhkzbHILagPyFgF5BZUkni5FANK8r3_YvVK6rg9TaA_n8Wf-pDe-eAlBLnrytpc_GdafeyUM80FgsGxYtFULjfcgvCixRCfcudQ09QBuPQ8PYKDV4vY"/>
+<span class="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 rounded-full ring-1 ring-white"></span>
+</div>
+<div class="hidden sm:flex flex-col text-left">
+<span class="text-xs font-semibold text-zinc-900 leading-tight">Insp. Rajesh Kumar</span>
+<span class="text-[10px] text-zinc-500">SSB Border Unit #4</span>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: ContentArea -->
+<main class="flex-1 p-5 overflow-y-auto flex flex-col">
+<!-- Header Section: Title & Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+<div>
+<h1 class="text-xl font-bold text-zinc-900 tracking-tight">Case Management &amp; Flagged Detections</h1>
+<p class="text-xs text-zinc-500 mt-0.5">Live queue of intercepted cases, escalated investigations, and resolved forensic screenings.</p>
+</div>
+<!-- Right action buttons -->
+<div class="flex items-center gap-2.5">
+<button class="bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-800 text-xs font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+<svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Export Case Log (CSV)</span>
+</button>
+<button class="bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm transition-colors">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>+ Manual Case Entry</span>
+</button>
+</div>
+</div>
+<!-- View Tabs & Filtering Tools Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-5 p-2 bg-zinc-50 rounded-xl border border-zinc-200/80">
+<!-- Segmented Control View Tabs -->
+<div class="inline-flex bg-zinc-200/70 p-0.5 rounded-lg text-xs font-medium self-start lg:self-auto">
+<button class="px-3 py-1 rounded-md bg-white text-zinc-900 shadow-sm font-semibold">Board</button>
+<button class="px-3 py-1 rounded-md text-zinc-600 hover:text-zinc-900 transition-colors">List</button>
+<button class="px-3 py-1 rounded-md text-zinc-600 hover:text-zinc-900 transition-colors">Table</button>
+</div>
+<!-- Filter Controls Group -->
+<div class="flex flex-wrap items-center gap-2">
+<!-- Search Box -->
+<div class="relative flex items-center flex-1 sm:flex-initial">
+<svg class="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="bg-white border border-zinc-200 text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-zinc-400 text-zinc-700 w-full sm:w-60 shadow-sm" placeholder="Search case ID, passenger name, doc number..." type="text"/>
+</div>
+<!-- Status Filter -->
+<select class="bg-white border border-zinc-200 text-xs font-medium text-zinc-700 rounded-lg px-2.5 py-1.5 shadow-sm focus:outline-none focus:ring-1 focus:ring-zinc-400">
+<option>All Statuses</option>
+<option>Pending Review</option>
+<option>Escalated</option>
+<option>Resolved</option>
+</select>
+<!-- Checkpoint Filter -->
+<select class="bg-white border border-zinc-200 text-xs font-medium text-zinc-700 rounded-lg px-2.5 py-1.5 shadow-sm focus:outline-none focus:ring-1 focus:ring-zinc-400">
+<option>All Checkpoints</option>
+<option>Raxaul ICP</option>
+<option>Attari</option>
+<option>Petrapole</option>
+</select>
+<!-- Risk Level Filter -->
+<select class="bg-white border border-zinc-200 text-xs font-medium text-zinc-700 rounded-lg px-2.5 py-1.5 shadow-sm focus:outline-none focus:ring-1 focus:ring-zinc-400">
+<option>All Risk Levels</option>
+<option>High (70% - 100%)</option>
+<option>Medium (30% - 69%)</option>
+<option>Low (0% - 29%)</option>
+</select>
+<!-- Date Range Picker Pill -->
+<div class="flex items-center gap-1.5 bg-white border border-zinc-200 text-xs font-medium text-zinc-700 px-2.5 py-1.5 rounded-lg shadow-sm cursor-pointer hover:bg-zinc-50">
+<svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><rect height="18" rx="2" stroke-width="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18" stroke-width="2"></path></svg>
+<span>Last 7 Days (18 Oct - 24 Oct 2024)</span>
+</div>
+</div>
+</div>
+<!-- BEGIN: Main Work Area (Kanban Grid + Slide-over Detail Drawer) -->
+<div class="flex-1 flex gap-5 items-start overflow-hidden">
+<!-- BEGIN: KanbanBoardColumns -->
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 items-start overflow-y-auto pr-1">
+<!-- ==================== COLUMN 1: PENDING REVIEW ==================== -->
+<div class="bg-zinc-50/90 rounded-xl p-3 border border-zinc-200/80">
+<!-- Column Header -->
+<div class="flex items-center justify-between mb-3 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<h3 class="font-semibold text-xs text-zinc-800">Pending Review</h3>
+<span class="text-[10px] bg-amber-100 text-amber-800 font-semibold px-1.5 py-0.2 rounded-full">6 Cases</span>
+</div>
+<div class="flex items-center gap-1 text-zinc-400">
+<button class="hover:text-zinc-600 p-0.5">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24">
+<circle cx="8" cy="6" r="1.5"></circle><circle cx="16" cy="6" r="1.5"></circle>
+<circle cx="8" cy="12" r="1.5"></circle><circle cx="16" cy="12" r="1.5"></circle>
+<circle cx="8" cy="18" r="1.5"></circle><circle cx="16" cy="18" r="1.5"></circle>
+</svg>
+</button>
+<button class="hover:text-zinc-600 p-0.5">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Task Cards Container -->
+<div class="space-y-2.5">
+<!-- Card 1 (SELECTED CASE - active ring) -->
+<div class="bg-white p-3.5 rounded-xl border-2 border-zinc-900 shadow-sm relative cursor-pointer hover:shadow transition-shadow">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8902</span>
+<span class="inline-flex items-center gap-1 bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse"></span> High 88%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">MD. Asif Ali</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: National ID (BGD)</p>
+<div class="p-2 rounded-lg bg-rose-50/60 border border-rose-100 text-[10px] text-rose-800 leading-tight mb-3">
+<strong class="font-semibold">Trigger:</strong> Photo Tampering &amp; MRZ Checksum Fail
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Insp. Rajesh Kumar" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk4QEx5oZpoFV2taCVTkyra-TFXjJRABSMjmozKUFeV2RO7PSQrIhVDrTtHdH9zD1-acm4zqPO6aKxxGPCbgoZ2uFsrT_tTNp0qqhmBm_OuCKKaTLhpjCAJDtFOW_dcgKs5UhkzbHILagPyFgF5BZUkni5FANK8r3_YvVK6rg9TaA_n8Wf-pDe-eAlBLnrytpc_GdafeyUM80FgsGxYtFULjfcgvCixRCfcudQ09QBuPQ8PYKDV4vY"/>
+<span class="truncate max-w-[95px] text-zinc-700 font-medium">Insp. Rajesh Kumar</span>
+</div>
+<span class="text-zinc-400 font-mono">14:24 Today</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-3.5 rounded-xl border border-zinc-200 shadow-sm hover:shadow transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8899</span>
+<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Medium 54%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">Vikramaditya Singh</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: Indian Aadhaar Card</p>
+<div class="p-2 rounded-lg bg-amber-50/60 border border-amber-100 text-[10px] text-amber-800 leading-tight mb-3">
+<strong class="font-semibold">Trigger:</strong> Secondary Name Mismatch
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Sub-Insp. Neha Verma" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnAzyQZmzAyJPYtHDv5Qia5O_ZeFxJEWnJwI-RsksFs8edETT5MGwB08vGscu5FPgAoqASP2Fj6OUlOOxUT9roDlyw_3H-OZMzF3uIft8HweEp6gXZ3D24tlrOxE5Z3Hqx690UDzVobfxF5kNe-8Y-B1hvGDEGho1hHx9epmvvCVS5jdDSdE3HlPXcZeoxkqfN51SJUoq_ChS4yBMW0_09-yLonCBCP3VKAT49-o5FiqbzGFBPQAtS"/>
+<span class="truncate max-w-[95px] text-zinc-700 font-medium">Sub-Insp. Neha Verma</span>
+</div>
+<span class="text-zinc-400 font-mono">13:58 Today</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-3.5 rounded-xl border border-zinc-200 shadow-sm hover:shadow transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8895</span>
+<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Medium 48%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">Fatima Zahra</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: Diplomatic Passport</p>
+<div class="p-2 rounded-lg bg-amber-50/60 border border-amber-100 text-[10px] text-amber-800 leading-tight mb-3">
+<strong class="font-semibold">Trigger:</strong> UV Watermark Faded
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Insp. Rajesh Kumar" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk4QEx5oZpoFV2taCVTkyra-TFXjJRABSMjmozKUFeV2RO7PSQrIhVDrTtHdH9zD1-acm4zqPO6aKxxGPCbgoZ2uFsrT_tTNp0qqhmBm_OuCKKaTLhpjCAJDtFOW_dcgKs5UhkzbHILagPyFgF5BZUkni5FANK8r3_YvVK6rg9TaA_n8Wf-pDe-eAlBLnrytpc_GdafeyUM80FgsGxYtFULjfcgvCixRCfcudQ09QBuPQ8PYKDV4vY"/>
+<span class="truncate max-w-[95px] text-zinc-700 font-medium">Insp. Rajesh Kumar</span>
+</div>
+<span class="text-zinc-400 font-mono">13:15 Today</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ==================== COLUMN 2: ESCALATED ==================== -->
+<div class="bg-zinc-50/90 rounded-xl p-3 border border-zinc-200/80">
+<!-- Column Header -->
+<div class="flex items-center justify-between mb-3 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<h3 class="font-semibold text-xs text-zinc-800">Escalated</h3>
+<span class="text-[10px] bg-rose-100 text-rose-800 font-semibold px-1.5 py-0.2 rounded-full">5 Cases</span>
+</div>
+<div class="flex items-center gap-1 text-zinc-400">
+<button class="hover:text-zinc-600 p-0.5">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24">
+<circle cx="8" cy="6" r="1.5"></circle><circle cx="16" cy="6" r="1.5"></circle>
+<circle cx="8" cy="12" r="1.5"></circle><circle cx="16" cy="12" r="1.5"></circle>
+<circle cx="8" cy="18" r="1.5"></circle><circle cx="16" cy="18" r="1.5"></circle>
+</svg>
+</button>
+<button class="hover:text-zinc-600 p-0.5">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Task Cards Container -->
+<div class="space-y-2.5">
+<!-- Card 1 -->
+<div class="bg-white p-3.5 rounded-xl border border-zinc-200 shadow-sm hover:shadow transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8871</span>
+<span class="inline-flex items-center gap-1 bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> High 92%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">Chen Wei</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: Emergency Travel Doc</p>
+<div class="p-2 rounded-lg bg-rose-50/60 border border-rose-100 text-[10px] text-rose-800 leading-tight mb-3">
+<strong class="font-semibold">Trigger:</strong> Interpol Watchlist Hit
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Dy. SP K. Sharma" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgCk6bbfiHAZAAQgL2fipAFHy93w86YnKyoMha4IJ_PXCRUFLlfD4Hup-U10S0KaO-FixLCXMScABfWswP47KZVPi86yUD16uA0ttqpnBCmEBEOz6s24dEz8bvLKu12BFlTuZx2XHwL1oIIcq4rIpaFiQyx6xUh-qeJuFmqRx8fYgXLc1A6uiSHH738pAA2rFG23Envj_WpV2x7gex8wf9C4KFs3AGJRfBWAcAB3qBNydt6zmJUIov"/>
+<span class="truncate max-w-[110px] text-zinc-700 font-medium">Dy. SP K. Sharma</span>
+</div>
+<span class="text-zinc-400 font-mono">11:42 Today</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-3.5 rounded-xl border border-zinc-200 shadow-sm hover:shadow transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8864</span>
+<span class="inline-flex items-center gap-1 bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> High 85%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">Carlos Mendez</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: Machine Readable Visa</p>
+<div class="p-2 rounded-lg bg-rose-50/60 border border-rose-100 text-[10px] text-rose-800 leading-tight mb-3">
+<strong class="font-semibold">Trigger:</strong> Biometric Impersonation (Face Mismatch)
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Dy. SP K. Sharma" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgCk6bbfiHAZAAQgL2fipAFHy93w86YnKyoMha4IJ_PXCRUFLlfD4Hup-U10S0KaO-FixLCXMScABfWswP47KZVPi86yUD16uA0ttqpnBCmEBEOz6s24dEz8bvLKu12BFlTuZx2XHwL1oIIcq4rIpaFiQyx6xUh-qeJuFmqRx8fYgXLc1A6uiSHH738pAA2rFG23Envj_WpV2x7gex8wf9C4KFs3AGJRfBWAcAB3qBNydt6zmJUIov"/>
+<span class="truncate max-w-[110px] text-zinc-700 font-medium">Dy. SP K. Sharma</span>
+</div>
+<span class="text-zinc-400 font-mono">10:18 Today</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ==================== COLUMN 3: RESOLVED ==================== -->
+<div class="bg-zinc-50/90 rounded-xl p-3 border border-zinc-200/80">
+<!-- Column Header -->
+<div class="flex items-center justify-between mb-3 px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<h3 class="font-semibold text-xs text-zinc-800">Resolved</h3>
+<span class="text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.2 rounded-full">32 Cases Today</span>
+</div>
+<div class="flex items-center gap-1 text-zinc-400">
+<button class="hover:text-zinc-600 p-0.5">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24">
+<circle cx="8" cy="6" r="1.5"></circle><circle cx="16" cy="6" r="1.5"></circle>
+<circle cx="8" cy="12" r="1.5"></circle><circle cx="16" cy="12" r="1.5"></circle>
+<circle cx="8" cy="18" r="1.5"></circle><circle cx="16" cy="18" r="1.5"></circle>
+</svg>
+</button>
+<button class="hover:text-zinc-600 p-0.5">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Task Cards Container -->
+<div class="space-y-2.5">
+<!-- Card 1 -->
+<div class="bg-white p-3.5 rounded-xl border border-zinc-200 shadow-sm hover:shadow transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8840</span>
+<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Low 4%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">Tenzing Norbu</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: Nepal Citizen Card</p>
+<div class="p-2 rounded-lg bg-emerald-50/60 border border-emerald-100 text-[10px] text-emerald-800 leading-tight mb-3">
+<strong class="font-semibold">Decision:</strong> Cleared after manual consular verification
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Officer R. Das" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs7ipyC1fDSKGWf5XKmq3Ih3Js-ykc1yd7uMkOZtu6EE1isBQ28wjA6_1fnmhoXz20SkfcaYC4Yl0XVmSQHykX7khU-42zOuqEK405PR1nxmFd-atwgm1SWHNG1DOC2kdsic8XuWfgg5mlHXS8Qcw-2U_CdGMVMNy5cqEkAhniHJCOq9jIDWlCZByjBGJsIhP9xsLrWsZdnji7EmGwZPL6iEy-W8U1u5ITdVTX19JrVGYZD_JePlxP"/>
+<span class="truncate max-w-[95px] text-zinc-700 font-medium">Officer R. Das</span>
+</div>
+<span class="text-zinc-400 font-mono">09:40 Today</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-3.5 rounded-xl border border-zinc-200 shadow-sm hover:shadow transition-shadow cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[10px] font-mono font-medium text-zinc-500">#SSB-2024-8835</span>
+<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Low 8%
+                    </span>
+</div>
+<h4 class="text-xs font-semibold text-zinc-900 leading-snug">Sarah Jenkins</h4>
+<p class="text-[11px] text-zinc-600 mt-0.5 mb-2 font-medium">Doc: UK Passport</p>
+<div class="p-2 rounded-lg bg-emerald-50/60 border border-emerald-100 text-[10px] text-emerald-800 leading-tight mb-3">
+<strong class="font-semibold">Decision:</strong> OCR glitch resolved, valid e-Chip verified
+                  </div>
+<div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-500">
+<div class="flex items-center gap-1.5">
+<img alt="Officer R. Das" class="w-4 h-4 rounded-full object-cover ring-1 ring-zinc-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs7ipyC1fDSKGWf5XKmq3Ih3Js-ykc1yd7uMkOZtu6EE1isBQ28wjA6_1fnmhoXz20SkfcaYC4Yl0XVmSQHykX7khU-42zOuqEK405PR1nxmFd-atwgm1SWHNG1DOC2kdsic8XuWfgg5mlHXS8Qcw-2U_CdGMVMNy5cqEkAhniHJCOq9jIDWlCZByjBGJsIhP9xsLrWsZdnji7EmGwZPL6iEy-W8U1u5ITdVTX19JrVGYZD_JePlxP"/>
+<span class="truncate max-w-[95px] text-zinc-700 font-medium">Officer R. Das</span>
+</div>
+<span class="text-zinc-400 font-mono">08:15 Today</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- END: KanbanBoardColumns -->
+<!-- BEGIN: Selected Case Detail Drawer (Side-panel) -->
+<aside class="w-[360px] xl:w-[390px] flex-shrink-0 bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col h-full overflow-hidden">
+<!-- Drawer Header -->
+<div class="p-4 border-b border-zinc-200 bg-zinc-50/50">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-mono font-semibold text-zinc-500">CASE #SSB-2024-8902</span>
+<span class="inline-flex items-center gap-1 bg-rose-100 text-rose-800 border border-rose-300 px-2 py-0.5 rounded-full text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span> 88% Critical
+              </span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-base font-bold text-zinc-900 tracking-tight">MD. Asif Ali</h3>
+<p class="text-xs text-zinc-500">Bangladesh National ID Card (Smart NID)</p>
+</div>
+<button class="text-zinc-400 hover:text-zinc-600 p-1 rounded-md hover:bg-zinc-200/50">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<!-- Drawer Scrollable Body -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Forensic Inspection Preview: Original vs UV view thumbnail -->
+<div>
+<label class="text-[11px] font-semibold text-zinc-700 uppercase tracking-wider block mb-2">Forensic Spectral Imagery</label>
+<div class="grid grid-cols-2 gap-2">
+<div class="border border-zinc-200 rounded-lg p-1.5 bg-zinc-50">
+<div class="relative aspect-[4/3] rounded bg-zinc-900/10 overflow-hidden flex items-center justify-center border border-zinc-200">
+<div class="absolute inset-0 bg-gradient-to-tr from-zinc-800/80 to-zinc-600/40 mix-blend-overlay"></div>
+<img alt="Original Doc Scan" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArZqYOdeYLAcuNytpzkj7YCEYxOAAa3ebFJkrlFvCKjM0fXas3vuvUmhGarh5cwRE0gtNCvNT5eVudvtOWlZqcS6-aC6me_3o4b5E5Q8J1grlUzotly7zoqxtjdKnQqznKqisMZQA8scZfGtyzN1NjypwwtB8Qya_jb8h8cuOLVf-lvNRZ2r0B9z6fJwv6D50yohIUP4-c8KgcuTBw2X3RX8sHhGqEURg8me6GVCiA0FwYEZtxu4gQ"/>
+<span class="absolute bottom-1 left-1 bg-black/75 text-white text-[9px] font-mono px-1 rounded">White Light (Raw)</span>
+</div>
+</div>
+<div class="border border-purple-200 rounded-lg p-1.5 bg-purple-50/40">
+<div class="relative aspect-[4/3] rounded bg-indigo-950 overflow-hidden flex items-center justify-center border border-purple-300">
+<div class="absolute inset-0 bg-gradient-to-tr from-purple-900 to-indigo-900 opacity-90"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2">
+<svg class="w-5 h-5 text-cyan-400 mb-1 animate-pulse" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span class="text-[9px] text-rose-300 font-semibold leading-tight">IR/UV Ghost Hologram Missing</span>
+</div>
+<span class="absolute bottom-1 left-1 bg-purple-900/90 text-purple-200 text-[9px] font-mono px-1 rounded">UV-A (365nm)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- All 4 Forensic Module Scores -->
+<div>
+<label class="text-[11px] font-semibold text-zinc-700 uppercase tracking-wider block mb-2">Automated Forensic Analysis</label>
+<div class="space-y-2 bg-zinc-50 p-2.5 rounded-lg border border-zinc-200 text-xs">
+<!-- Module 1 -->
+<div class="flex items-center justify-between">
+<span class="text-zinc-600 font-medium text-[11px]">1. OCR Confidence</span>
+<div class="flex items-center gap-1.5">
+<span class="text-[11px] text-zinc-500 font-mono">82%</span>
+<span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-medium">Low on Doc No.</span>
+</div>
+</div>
+<div class="w-full bg-zinc-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full" style="width: 82%"></div>
+</div>
+<!-- Module 2 -->
+<div class="flex items-center justify-between pt-1">
+<span class="text-zinc-600 font-medium text-[11px]">2. Cryptographic/MRZ Checksum</span>
+<span class="text-[10px] bg-rose-100 text-rose-700 font-bold px-1.5 py-0.2 rounded">FAIL (Modulo-7 Mismatch)</span>
+</div>
+<!-- Module 3 -->
+<div class="flex items-center justify-between pt-1">
+<span class="text-zinc-600 font-medium text-[11px]">3. AI Tampering Probability</span>
+<div class="flex items-center gap-1.5">
+<span class="text-[11px] text-rose-600 font-bold font-mono">88%</span>
+<span class="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-medium">Photo Replaced</span>
+</div>
+</div>
+<div class="w-full bg-zinc-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-rose-600 h-full rounded-full" style="width: 88%"></div>
+</div>
+<!-- Module 4 -->
+<div class="flex items-center justify-between pt-1">
+<span class="text-zinc-600 font-medium text-[11px]">4. Face Biometric Match</span>
+<div class="flex items-center gap-1.5">
+<span class="text-[11px] text-rose-600 font-bold font-mono">42%</span>
+<span class="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded font-bold">FAIL</span>
+</div>
+</div>
+<div class="w-full bg-zinc-200 h-1.5 rounded-full overflow-hidden">
+<div class="bg-rose-500 h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+</div>
+<!-- Officer Notes Thread -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="text-[11px] font-semibold text-zinc-700 uppercase tracking-wider">Officer Notes Thread</label>
+<span class="text-[10px] text-zinc-400">2 Updates</span>
+</div>
+<div class="space-y-2 text-xs">
+<!-- Note 1 -->
+<div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-zinc-900 text-[11px]">Insp. Rajesh Kumar</span>
+<span class="text-[9px] bg-zinc-200 text-zinc-600 px-1 rounded">Booth 02</span>
+</div>
+<span class="text-[10px] text-zinc-400 font-mono">14:26</span>
+</div>
+<p class="text-[11px] text-zinc-600 leading-snug">"Passenger appeared nervous at Booth 2. Document photo laminate shows micro-creasing."</p>
+</div>
+<!-- Note 2 -->
+<div class="p-2.5 rounded-lg bg-amber-50/50 border border-amber-200">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-zinc-900 text-[11px]">Dy. SP K. Sharma</span>
+<span class="text-[9px] bg-amber-200 text-amber-900 font-medium px-1 rounded">Special Cell</span>
+</div>
+<span class="text-[10px] text-zinc-400 font-mono">14:35</span>
+</div>
+<p class="text-[11px] text-zinc-700 leading-snug">"Cross-checked biometric with central database. Potential alias hit found for Rahman Khan."</p>
+</div>
+</div>
+</div>
+<!-- Decision History Log -->
+<div>
+<label class="text-[11px] font-semibold text-zinc-700 uppercase tracking-wider block mb-2">Decision History Log</label>
+<div class="relative pl-4 space-y-3 before:absolute before:left-1.5 before:top-1 before:bottom-1 before:w-0.5 before:bg-zinc-200 text-[11px]">
+<div class="relative">
+<span class="absolute -left-4 top-1 w-2 h-2 rounded-full bg-zinc-400"></span>
+<div class="flex items-center justify-between">
+<span class="text-zinc-700 font-medium">Scanned at Booth 02</span>
+<span class="text-[10px] text-zinc-400 font-mono">14:24</span>
+</div>
+</div>
+<div class="relative">
+<span class="absolute -left-4 top-1 w-2 h-2 rounded-full bg-rose-500"></span>
+<div class="flex items-center justify-between">
+<span class="text-rose-700 font-medium">System flagged High Risk (88%)</span>
+<span class="text-[10px] text-zinc-400 font-mono">14:25</span>
+</div>
+</div>
+<div class="relative">
+<span class="absolute -left-4 top-1 w-2 h-2 rounded-full bg-amber-500"></span>
+<div class="flex items-center justify-between">
+<span class="text-zinc-700 font-medium">Escalated to Supervisor queue</span>
+<span class="text-[10px] text-zinc-400 font-mono">14:28</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Bar in Drawer -->
+<div class="p-3 border-t border-zinc-200 bg-zinc-50 flex flex-col gap-2">
+<button class="w-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Issue Detention Warrant</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] font-medium py-1.5 px-2 rounded-lg flex items-center justify-center gap-1 transition-colors">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Escalate to IB/RAW</span>
+</button>
+<button class="bg-white border border-zinc-300 hover:bg-zinc-100 text-zinc-700 text-[11px] font-medium py-1.5 px-2 rounded-lg flex items-center justify-center gap-1 transition-colors">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Approve Override</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- END: Selected Case Detail Drawer -->
+</div>
+<!-- END: Main Work Area -->
+</main>
+<!-- END: ContentArea -->
+</div>
+<!-- END: MainContentArea -->
+</div>
+<!-- END: MainContainer -->
+</body></html>

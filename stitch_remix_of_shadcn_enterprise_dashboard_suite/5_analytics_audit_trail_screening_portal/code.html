@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analytics &amp; Audit Trail - SSB Screening | Govt of India</title>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style data-purpose="custom-typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#f8f9fa] text-[#09090b] antialiased">
+<div class="flex min-h-screen">
+<!-- BEGIN: Sidebar -->
+<aside class="w-64 border-r border-[#e4e4e7] bg-white p-4 flex flex-col justify-between shrink-0">
+<div>
+<!-- Brand Logo Header -->
+<div class="flex items-center gap-2.5 px-2 py-3 mb-4">
+<div class="w-7 h-7 bg-zinc-950 rounded flex items-center justify-center text-white shadow-sm">
+<i class="w-4 h-4" data-lucide="shield-alert"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-xs tracking-tight text-zinc-900 leading-none">SSB Screening</span>
+<span class="text-[10px] text-zinc-500 font-medium tracking-normal mt-0.5">Govt of India · MHA</span>
+</div>
+</div>
+<!-- Search Box -->
+<div class="relative mb-5">
+<i class="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" data-lucide="search"></i>
+<input class="w-full pl-8 pr-8 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-md focus:outline-none focus:ring-1 focus:ring-zinc-400 text-zinc-700 placeholder-zinc-400" placeholder="Quick navigate..." type="text"/>
+<span class="text-[10px] text-zinc-400 border border-zinc-200 rounded px-1 py-0.5 absolute right-2 top-1/2 -translate-y-1/2">⌘K</span>
+</div>
+<!-- Navigation Menu -->
+<nav class="space-y-1 text-xs">
+<div class="text-[11px] font-medium text-zinc-400 px-3 py-1.5 uppercase tracking-wider">Screening Operations</div>
+<a class="flex items-center gap-2.5 px-3 py-2 text-zinc-600 hover:text-zinc-900 rounded-md hover:bg-zinc-50" href="#">
+<i class="w-4 h-4" data-lucide="layout-dashboard"></i>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-zinc-600 hover:text-zinc-900 rounded-md hover:bg-zinc-50" href="#">
+<div class="flex items-center gap-2.5">
+<i class="w-4 h-4" data-lucide="scan-line"></i>
+<span>Scan Document</span>
+</div>
+<span class="text-[10px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.2">Live</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-zinc-600 hover:text-zinc-900 rounded-md hover:bg-zinc-50" href="#">
+<div class="flex items-center gap-2.5">
+<i class="w-4 h-4" data-lucide="folder-clock"></i>
+<span>Case Management</span>
+</div>
+<span class="text-[10px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded px-1.5 py-0.2">14</span>
+</a>
+<!-- Active Navigation Item -->
+<a class="flex items-center gap-2.5 px-3 py-2 text-zinc-900 font-semibold rounded-md bg-zinc-200/70" href="#">
+<i class="w-4 h-4 text-zinc-900" data-lucide="file-check-2"></i>
+<span>Analytics &amp; Audit</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-zinc-600 hover:text-zinc-900 rounded-md hover:bg-zinc-50" href="#">
+<div class="flex items-center gap-2.5">
+<i class="w-4 h-4" data-lucide="settings-2"></i>
+<span>Admin Settings</span>
+</div>
+</a>
+</nav>
+</div>
+<!-- Bottom Status / System Card -->
+<div class="p-3.5 bg-zinc-50 border border-zinc-200/80 rounded-xl space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> AI Engine v4.8
+</span>
+<span class="text-[10px] text-zinc-500 font-mono">ONLINE</span>
+</div>
+<p class="text-[11px] text-zinc-500 leading-relaxed">Cross-ICP National Database sync active. Latency: 18ms across 34 ICP checkposts.</p>
+<div class="pt-1">
+<div class="w-full bg-zinc-200 rounded-full h-1">
+<div class="bg-zinc-800 h-1 rounded-full" style="width: 98%;"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Area -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- BEGIN: Top Navigation Bar -->
+<header class="h-14 border-b border-zinc-200/80 bg-white flex items-center justify-between px-6 shrink-0">
+<div class="flex items-center gap-2.5 text-xs font-medium text-zinc-800">
+<button class="text-zinc-500 hover:text-zinc-800 mr-1">
+<i class="w-4 h-4" data-lucide="panel-left-close"></i>
+</button>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-semibold text-zinc-900">Indo-Nepal Checkpoint (Raxaul)</span>
+<span class="text-zinc-300">|</span>
+<span class="text-zinc-500 font-mono text-[11px]">ICP-RX-GATE-04</span>
+<i class="w-3.5 h-3.5 text-zinc-400 cursor-pointer ml-0.5" data-lucide="chevrons-up-down"></i>
+</div>
+<div class="flex items-center gap-4 text-xs">
+<div class="hidden sm:flex items-center gap-2 border border-zinc-200 bg-zinc-50 px-2.5 py-1 rounded text-zinc-600 text-[11px]">
+<i class="w-3.5 h-3.5 text-zinc-500" data-lucide="server"></i>
+<span>MHA Central Cloud: Sync OK</span>
+</div>
+<button class="text-zinc-500 hover:text-zinc-800 relative">
+<i class="w-4 h-4" data-lucide="bell"></i>
+<span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+</button>
+<button class="text-zinc-500 hover:text-zinc-800">
+<i class="w-4 h-4" data-lucide="moon"></i>
+</button>
+<!-- Officer Profile Dropdown -->
+<div class="flex items-center gap-2 pl-2 border-l border-zinc-200 cursor-pointer">
+<img alt="Insp. Rajesh Kumar" class="w-7 h-7 rounded-full object-cover border border-zinc-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5bhXIPVHRFZlGs4fVcg-DC0q3d-PDLUcTTcPiNkedRtWzj3E5CmPgFZjCRs6N_N2p235vhf3uBI5F1Mj8KGI_uKJFac1x4MTUE2FpnuWA8bAvngiGJja9Tme7M_bmGua7yM_hBPSi4q0uLDWcRZsA2vAJQebFX4JhfhnDM0bepFxqyO4A1xyFP3DxHbG8s4z1spz_4r1ecQngG9N3Mk73v8ksH8tLFKTdgd36vUPbZUaZwKUQbMZJ"/>
+<div class="flex flex-col text-left">
+<span class="text-xs font-semibold text-zinc-900 leading-tight">Insp. Rajesh Kumar</span>
+<span class="text-[10px] text-zinc-500 leading-none">SSB-8842 · Officer In-Charge</span>
+</div>
+<i class="w-3 h-3 text-zinc-400" data-lucide="chevron-down"></i>
+</div>
+</div>
+</header>
+<!-- END: Top Navigation Bar -->
+<!-- BEGIN: Page Content Container -->
+<main class="p-6 overflow-y-auto space-y-6">
+<!-- Header Title & Range Controls -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div>
+<h1 class="text-xl font-bold tracking-tight text-zinc-900">Analytics &amp; Forensic Audit Trail</h1>
+<p class="text-xs text-zinc-500 mt-0.5">Centralized Border Screening Log, Cross-Check Historical Search, and Interception Intelligence</p>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-2 border border-zinc-200 bg-white text-xs text-zinc-700 px-3 py-1.5 rounded-md font-medium shadow-sm">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="calendar"></i>
+<span>01 Oct 2024 - 24 Oct 2024</span>
+</div>
+<button class="bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-medium px-3.5 py-1.5 rounded-md shadow-sm flex items-center gap-1.5">
+<i class="w-3.5 h-3.5" data-lucide="download"></i>
+<span>Export Dossier</span>
+</button>
+</div>
+</div>
+<!-- 1. Prominent Global Forensic Search Bar at Top -->
+<div class="bg-white border border-zinc-200/80 rounded-xl p-4 shadow-sm space-y-3">
+<div class="flex flex-col md:flex-row items-center gap-2.5">
+<div class="relative flex-1 w-full">
+<i class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" data-lucide="search"></i>
+<input class="w-full pl-10 pr-4 py-2 text-xs bg-zinc-50 border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-900 text-zinc-900 placeholder-zinc-400" placeholder="Search audit records by Passenger Name, Passport/Doc Number, National ID, or Face-Match Biometric Hash..." type="text" value="MD. Asif Ali / Doc: A-9283019-B"/>
+</div>
+<button class="w-full md:w-auto px-4 py-2 bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center justify-center gap-2 shrink-0">
+<i class="w-3.5 h-3.5" data-lucide="database"></i>
+<span>Search Database</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs border-t border-zinc-100">
+<div class="flex items-center gap-2">
+<span class="text-[11px] text-zinc-400 font-medium">Quick Filters:</span>
+<button class="px-2.5 py-1 rounded-md text-[11px] border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 font-medium">Last 24 Hours</button>
+<button class="px-2.5 py-1 rounded-md text-[11px] border border-zinc-200 bg-zinc-100 text-zinc-900 font-semibold">Last 30 Days</button>
+<button class="px-2.5 py-1 rounded-md text-[11px] border border-rose-200 bg-rose-50 text-rose-700 font-semibold flex items-center gap-1">
+<i class="w-3 h-3" data-lucide="alert-triangle"></i> High Risk Only
+          </button>
+</div>
+<div class="text-[11px] text-zinc-500 flex items-center gap-1">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="clock"></i>
+<span>Matched 3 historic cross-border entries across 2 Checkpoints</span>
+</div>
+</div>
+</div>
+<!-- 2. Identity History Result Banner (Demo search for "MD. Asif Ali / Doc: A-9283019-B") -->
+<div class="bg-white border-2 border-rose-200 rounded-xl p-5 shadow-sm bg-gradient-to-r from-rose-50/30 via-white to-white">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 pb-4 border-b border-zinc-100">
+<div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-rose-100 text-rose-800 border border-rose-200 rounded text-[10px] font-bold uppercase tracking-wider">Forensic Match Alert</span>
+<span class="text-xs font-mono text-zinc-500 font-semibold">Biometric Match ID: #BIO-IND-8821</span>
+</div>
+<h2 class="text-base font-bold text-zinc-900 mt-1">Identity Cross-Border Record &amp; Alias History</h2>
+<p class="text-xs text-zinc-600 mt-0.5">
+<strong class="text-zinc-900">Subject:</strong> MD. Asif Ali 
+              <span class="mx-1.5 text-zinc-300">•</span>
+<strong class="text-zinc-900">Aliases:</strong> <span class="font-mono text-rose-700 font-semibold">Rahman Khan, Tareq Aziz</span>
+<span class="mx-1.5 text-zinc-300">•</span>
+<strong class="text-zinc-900">Origin Flag:</strong> Suspected Multiple Genuine Substrates Re-used
+            </p>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-3 py-1 bg-red-600 text-white rounded-md text-xs font-bold flex items-center gap-1.5 shadow-sm">
+<i class="w-3.5 h-3.5" data-lucide="shield-alert"></i>
+<span>Detained at Raxaul Booth 4</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
+<!-- Historical Crossings Timeline (7 cols) -->
+<div class="lg:col-span-7 space-y-3">
+<h4 class="text-xs font-semibold text-zinc-900 uppercase tracking-wide">Historical Crossings &amp; Interceptions</h4>
+<div class="space-y-2.5">
+<!-- Entry 1 -->
+<div class="p-3 bg-zinc-50 border border-zinc-200/80 rounded-lg flex items-center justify-between text-xs">
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+<i class="w-3.5 h-3.5" data-lucide="check"></i>
+</div>
+<div>
+<div class="font-semibold text-zinc-900">12 Jan 2023 · ICP Petrapole</div>
+<div class="text-[11px] text-zinc-500 font-mono">Passport #B091244 (Declared: Bangladeshi Citizen)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">Cleared (Normal)</span>
+</div>
+<!-- Entry 2 -->
+<div class="p-3 bg-amber-50/50 border border-amber-200 rounded-lg flex items-center justify-between text-xs">
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+<i class="w-3.5 h-3.5" data-lucide="alert-circle"></i>
+</div>
+<div>
+<div class="font-semibold text-zinc-900">18 Jul 2023 · ICP Raxaul</div>
+<div class="text-[11px] text-zinc-600 font-mono">Emergency Doc #E9102 (Alias: Rahman Khan)</div>
+</div>
+</div>
+<span class="text-[11px] font-semibold text-amber-800 bg-amber-100/60 border border-amber-300 px-2 py-0.5 rounded">Flagged &amp; Interrogated</span>
+</div>
+<!-- Entry 3 -->
+<div class="p-3 bg-rose-50 border border-rose-300 rounded-lg flex items-center justify-between text-xs">
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+<i class="w-3.5 h-3.5" data-lucide="ban"></i>
+</div>
+<div>
+<div class="font-semibold text-rose-950">24 Oct 2024 (Today) · ICP Raxaul</div>
+<div class="text-[11px] text-rose-700 font-mono">Doc #A-9283019-B · Tampered National ID</div>
+</div>
+</div>
+<span class="text-[11px] font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded">Detained (88% Tampering)</span>
+</div>
+</div>
+</div>
+<!-- Face Gallery & Forensics Thumbnails (5 cols) -->
+<div class="lg:col-span-5 bg-zinc-50 border border-zinc-200/80 rounded-lg p-3.5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2.5">
+<span class="text-xs font-semibold text-zinc-900">Associated Face &amp; Doc Forensic Gallery</span>
+<span class="text-[10px] text-rose-600 font-bold bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">99.4% Face Biometric Match</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<!-- Face 1 -->
+<div class="border border-zinc-200 rounded-md p-1.5 bg-white text-center">
+<div class="w-full h-16 bg-zinc-200 rounded flex items-center justify-center text-zinc-500 overflow-hidden relative">
+<i class="w-6 h-6 text-zinc-400" data-lucide="user"></i>
+<span class="absolute bottom-0 right-0 bg-emerald-600 text-white text-[9px] px-1 rounded-tl">2023</span>
+</div>
+<div class="text-[10px] font-medium text-zinc-700 mt-1 truncate">Petrapole Scan</div>
+<div class="text-[9px] text-zinc-400">#B091244</div>
+</div>
+<!-- Face 2 -->
+<div class="border border-zinc-200 rounded-md p-1.5 bg-white text-center">
+<div class="w-full h-16 bg-zinc-200 rounded flex items-center justify-center text-zinc-500 overflow-hidden relative">
+<i class="w-6 h-6 text-zinc-400" data-lucide="user-check"></i>
+<span class="absolute bottom-0 right-0 bg-amber-600 text-white text-[9px] px-1 rounded-tl">Jul '23</span>
+</div>
+<div class="text-[10px] font-medium text-zinc-700 mt-1 truncate">Raxaul Gate</div>
+<div class="text-[9px] text-zinc-400">#E9102</div>
+</div>
+<!-- Face 3 (Today) -->
+<div class="border-2 border-rose-400 rounded-md p-1.5 bg-rose-50/50 text-center">
+<div class="w-full h-16 bg-rose-100 rounded flex items-center justify-center text-rose-600 overflow-hidden relative">
+<i class="w-6 h-6 text-rose-700" data-lucide="scan-face"></i>
+<span class="absolute bottom-0 right-0 bg-rose-700 text-white text-[9px] px-1 rounded-tl">Current</span>
+</div>
+<div class="text-[10px] font-bold text-rose-900 mt-1 truncate">Booth 4 Capture</div>
+<div class="text-[9px] font-mono text-rose-700">88% Fraud</div>
+</div>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-zinc-200 flex items-center justify-between text-[11px]">
+<span class="text-zinc-500">Forensic Flag: Ghost photo UV ghosting mismatch</span>
+<button class="text-zinc-900 font-semibold underline hover:text-black">Open Complete Intelligence Case</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. Analytics Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Chart 1: Fraud Detection & Interception Rate Over Time (Line Chart representation) -->
+<div class="bg-white border border-zinc-200/80 rounded-xl p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-1.5">
+<h3 class="text-sm font-semibold text-zinc-900">Fraud Detection &amp; Interception Trend</h3>
+<i class="w-3.5 h-3.5 text-zinc-400 cursor-pointer" data-lucide="info"></i>
+</div>
+<span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">AI Active</span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-2xl font-bold text-zinc-900">1.2%</span>
+<span class="text-xs text-zinc-500">interception rate (from 0.4% baseline)</span>
+</div>
+<p class="text-[11px] text-zinc-500 mb-4">Total screened: 48,200 | Fraudulent intercepted: 578 docs</p>
+<!-- Vector Sparkline / Trendline Chart -->
+<div class="h-32 w-full flex items-end">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 45">
+<!-- Gradient fill -->
+<defs>
+<lineargradient id="detectionTrendGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#18181b" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,40 L16,38 L33,35 L50,28 L66,22 L83,15 L100,8 L100,45 L0,45 Z" fill="url(#detectionTrendGrad)"></path>
+<path d="M0,40 L16,38 L33,35 L50,28 L66,22 L83,15 L100,8" fill="none" stroke="#18181b" stroke-width="2"></path>
+<!-- Data dots -->
+<circle cx="0" cy="40" fill="#18181b" r="2"></circle>
+<circle cx="16" cy="38" fill="#18181b" r="2"></circle>
+<circle cx="33" cy="35" fill="#18181b" r="2"></circle>
+<circle cx="50" cy="28" fill="#18181b" r="2"></circle>
+<circle cx="66" cy="22" fill="#18181b" r="2"></circle>
+<circle cx="83" cy="15" fill="#18181b" r="2"></circle>
+<circle cx="100" cy="8" fill="#e11d48" r="2.5"></circle>
+</svg>
+</div>
+<div class="flex justify-between text-[10px] text-zinc-400 mt-1">
+<span>May (0.4%)</span>
+<span>Jul (0.6%)</span>
+<span>Sep (0.9%)</span>
+<span class="text-zinc-900 font-semibold">Oct (1.2% AI)</span>
+</div>
+</div>
+<div class="pt-3 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-600">
+<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span> False negative rate down 76%</span>
+<span class="font-medium text-zinc-900">+300% AI Catch Rate</span>
+</div>
+</div>
+<!-- Chart 2: Fraud Breakdown by Tampering Category (Bar / Proportion Chart) -->
+<div class="bg-white border border-zinc-200/80 rounded-xl p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-1.5">
+<h3 class="text-sm font-semibold text-zinc-900">Fraud by Tampering Category</h3>
+<i class="w-3.5 h-3.5 text-zinc-400 cursor-pointer" data-lucide="info"></i>
+</div>
+<span class="text-[11px] font-medium text-zinc-500">578 Total</span>
+</div>
+<div class="space-y-3.5">
+<!-- Photo Replacement -->
+<div>
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-medium text-zinc-800">Photo Replacement</span>
+<span class="font-bold text-zinc-900">42% <span class="text-[10px] text-zinc-400 font-normal">(243)</span></span>
+</div>
+<div class="w-full bg-zinc-100 rounded-full h-2">
+<div class="bg-zinc-900 h-2 rounded-full" style="width: 42%;"></div>
+</div>
+</div>
+<!-- Stamp & Hologram Forgery -->
+<div>
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-medium text-zinc-800">Stamp &amp; Hologram Forgery</span>
+<span class="font-bold text-zinc-900">28% <span class="text-[10px] text-zinc-400 font-normal">(162)</span></span>
+</div>
+<div class="w-full bg-zinc-100 rounded-full h-2">
+<div class="bg-zinc-700 h-2 rounded-full" style="width: 28%;"></div>
+</div>
+</div>
+<!-- Text / MRZ Manipulation -->
+<div>
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-medium text-zinc-800">Text / MRZ Manipulation</span>
+<span class="font-bold text-zinc-900">18% <span class="text-[10px] text-zinc-400 font-normal">(104)</span></span>
+</div>
+<div class="w-full bg-zinc-100 rounded-full h-2">
+<div class="bg-zinc-500 h-2 rounded-full" style="width: 18%;"></div>
+</div>
+</div>
+<!-- Synthetic / Blank Substrate Fake -->
+<div>
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-medium text-zinc-800">Synthetic / Blank Substrate Fake</span>
+<span class="font-bold text-zinc-900">12% <span class="text-[10px] text-zinc-400 font-normal">(69)</span></span>
+</div>
+<div class="w-full bg-zinc-100 rounded-full h-2">
+<div class="bg-zinc-400 h-2 rounded-full" style="width: 12%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-3 border-t border-zinc-100 text-[11px] text-zinc-500 flex items-center justify-between">
+<span>Primary Attack: High-precision laminate peel</span>
+<span class="text-rose-600 font-medium">+14% this month</span>
+</div>
+</div>
+<!-- Chart 3: Checkpoint-wise Interception Comparison -->
+<div class="bg-white border border-zinc-200/80 rounded-xl p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-1.5">
+<h3 class="text-sm font-semibold text-zinc-900">Checkpoint-wise Interceptions</h3>
+<i class="w-3.5 h-3.5 text-zinc-400 cursor-pointer" data-lucide="info"></i>
+</div>
+<button class="text-[11px] font-medium text-zinc-600 hover:text-zinc-900 flex items-center gap-0.5">
+<span>Compare</span> <i class="w-3 h-3" data-lucide="chevron-right"></i>
+</button>
+</div>
+<!-- Bar Visualization for ICPs -->
+<div class="space-y-3">
+<!-- ICP Raxaul -->
+<div class="p-2.5 rounded-lg border border-zinc-100 bg-zinc-50/70">
+<div class="flex items-center justify-between text-xs mb-1.5">
+<span class="font-semibold text-zinc-900 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span> ICP Raxaul (Indo-Nepal)
+</span>
+<span class="font-bold text-zinc-900">342 flags</span>
+</div>
+<div class="w-full bg-zinc-200 rounded-full h-1.5">
+<div class="bg-rose-600 h-1.5 rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- ICP Petrapole -->
+<div class="p-2.5 rounded-lg border border-zinc-100 bg-zinc-50/70">
+<div class="flex items-center justify-between text-xs mb-1.5">
+<span class="font-semibold text-zinc-800 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span> ICP Petrapole (Indo-Bangla)
+</span>
+<span class="font-bold text-zinc-900">289 flags</span>
+</div>
+<div class="w-full bg-zinc-200 rounded-full h-1.5">
+<div class="bg-zinc-800 h-1.5 rounded-full" style="width: 84%;"></div>
+</div>
+</div>
+<!-- ICP Attari -->
+<div class="p-2.5 rounded-lg border border-zinc-100 bg-zinc-50/70">
+<div class="flex items-center justify-between text-xs mb-1.5">
+<span class="font-semibold text-zinc-800 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-zinc-400"></span> ICP Attari (Indo-Pak)
+</span>
+<span class="font-bold text-zinc-900">194 flags</span>
+</div>
+<div class="w-full bg-zinc-200 rounded-full h-1.5">
+<div class="bg-zinc-700 h-1.5 rounded-full" style="width: 57%;"></div>
+</div>
+</div>
+<!-- IGI Airport T3 -->
+<div class="p-2.5 rounded-lg border border-zinc-100 bg-zinc-50/70">
+<div class="flex items-center justify-between text-xs mb-1.5">
+<span class="font-semibold text-zinc-800 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-zinc-400"></span> IGI Airport T3 Delhi
+</span>
+<span class="font-bold text-zinc-900">162 flags</span>
+</div>
+<div class="w-full bg-zinc-200 rounded-full h-1.5">
+<div class="bg-zinc-500 h-1.5 rounded-full" style="width: 47%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-3 border-t border-zinc-100 flex items-center justify-between text-xs">
+<span class="text-zinc-500 text-[11px]">Raxaul handles 38% of total northern alerts</span>
+<span class="font-semibold text-rose-600 text-[11px]">Active Red Zone</span>
+</div>
+</div>
+</div>
+<!-- END: Analytics Charts Grid -->
+<!-- 4. Audit Log Table -->
+<div class="bg-white border border-zinc-200/80 rounded-xl overflow-hidden shadow-sm">
+<!-- Table Header bar -->
+<div class="p-5 border-b border-zinc-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-zinc-50/30">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-sm font-semibold text-zinc-900">Official Screening Audit Trail</h3>
+<span class="px-2 py-0.5 text-[10px] bg-zinc-200/70 text-zinc-700 rounded font-mono">Live Immutable Ledger</span>
+</div>
+<p class="text-xs text-zinc-500 mt-0.5">Real-time tamper-proof screening events, officer actions, and forensic dossiers.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 text-xs text-zinc-700 font-medium border border-zinc-200 bg-white px-3 py-1.5 rounded-md hover:bg-zinc-50 shadow-sm">
+<i class="w-3.5 h-3.5 text-zinc-500" data-lucide="file-spreadsheet"></i>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center gap-1.5 text-xs text-white font-medium bg-zinc-950 px-3 py-1.5 rounded-md hover:bg-zinc-800 shadow-sm">
+<i class="w-3.5 h-3.5" data-lucide="file-down"></i>
+<span>Export Audit Log (PDF)</span>
+</button>
+</div>
+</div>
+<!-- Table Component -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-zinc-200/80 bg-zinc-50 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+<th class="py-3 px-4">Timestamp</th>
+<th class="py-3 px-4">Officer ID</th>
+<th class="py-3 px-4">Document Type</th>
+<th class="py-3 px-4">Subject Name</th>
+<th class="py-3 px-4">Checkpoint</th>
+<th class="py-3 px-4">Risk Score</th>
+<th class="py-3 px-4">Final Decision</th>
+<th class="py-3 px-4 text-right">Forensic Dossier</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-zinc-100 text-zinc-700">
+<!-- Row 1 -->
+<tr class="hover:bg-zinc-50/80 transition-colors">
+<td class="py-3 px-4 font-mono text-[11px] text-zinc-500 whitespace-nowrap">2024-10-24 14:28:10</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">
+<div class="leading-tight">Insp. Rajesh Kumar</div>
+<div class="text-[10px] text-zinc-400 font-mono">SSB-8842</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-zinc-800">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="book-marked"></i> Nepal Passport
+                    </span>
+</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">Tenzing Norbu</td>
+<td class="py-3 px-4 text-zinc-600 whitespace-nowrap">Raxaul - Gate 2</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+<i class="w-3 h-3" data-lucide="shield-check"></i> Low 4%
+                    </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="text-xs font-semibold text-emerald-600">Cleared</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-700 border border-zinc-200 bg-white hover:bg-zinc-50 px-2.5 py-1 rounded shadow-2xs">
+<i class="w-3 h-3 text-zinc-500" data-lucide="file-text"></i> PDF Dossier
+                    </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-rose-50/40 hover:bg-rose-50/70 transition-colors">
+<td class="py-3 px-4 font-mono text-[11px] text-rose-800 whitespace-nowrap font-medium">2024-10-24 14:24:35</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">
+<div class="leading-tight">Insp. Rajesh Kumar</div>
+<div class="text-[10px] text-zinc-400 font-mono">SSB-8842</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-rose-900 font-medium">
+<i class="w-3.5 h-3.5 text-rose-500" data-lucide="id-card"></i> National ID
+                    </span>
+</td>
+<td class="py-3 px-4 font-bold text-rose-950 whitespace-nowrap">MD. Asif Ali</td>
+<td class="py-3 px-4 text-zinc-700 whitespace-nowrap">Raxaul - Booth 4</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded-full">
+<i class="w-3 h-3" data-lucide="alert-octagon"></i> High 88%
+                    </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="text-xs font-bold text-rose-700 bg-rose-100/80 px-2 py-0.5 rounded border border-rose-200">Detained</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 border border-rose-300 bg-white hover:bg-rose-50 px-2.5 py-1 rounded shadow-2xs">
+<i class="w-3 h-3 text-rose-600" data-lucide="file-warning"></i> PDF Dossier
+                    </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-zinc-50/80 transition-colors">
+<td class="py-3 px-4 font-mono text-[11px] text-zinc-500 whitespace-nowrap">2024-10-24 14:15:40</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">
+<div class="leading-tight">Sub-Insp. N. Verma</div>
+<div class="text-[10px] text-zinc-400 font-mono">SSB-9104</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-zinc-800">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="credit-card"></i> Indian Aadhaar
+                    </span>
+</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">Vikramaditya Singh</td>
+<td class="py-3 px-4 text-zinc-600 whitespace-nowrap">Raxaul - Booth 1</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-300 px-2 py-0.5 rounded-full">
+<i class="w-3 h-3" data-lucide="alert-circle"></i> Medium 54%
+                    </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">Supervisor Review</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-700 border border-zinc-200 bg-white hover:bg-zinc-50 px-2.5 py-1 rounded shadow-2xs">
+<i class="w-3 h-3 text-zinc-500" data-lucide="file-text"></i> PDF Dossier
+                    </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-rose-50/20 hover:bg-rose-50/60 transition-colors">
+<td class="py-3 px-4 font-mono text-[11px] text-rose-700 whitespace-nowrap">2024-10-24 14:09:12</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">
+<div class="leading-tight">Sub-Insp. N. Verma</div>
+<div class="text-[10px] text-zinc-400 font-mono">SSB-9104</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-zinc-800">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="file-badge"></i> Travel Cert
+                    </span>
+</td>
+<td class="py-3 px-4 font-semibold text-zinc-900 whitespace-nowrap">Chen Wei</td>
+<td class="py-3 px-4 text-zinc-600 whitespace-nowrap">Raxaul - Booth 2</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded-full">
+<i class="w-3 h-3" data-lucide="alert-octagon"></i> High 92%
+                    </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="text-xs font-bold text-rose-700 bg-rose-100/80 px-2 py-0.5 rounded border border-rose-200">Blacklist Hit</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-700 border border-zinc-200 bg-white hover:bg-zinc-50 px-2.5 py-1 rounded shadow-2xs">
+<i class="w-3 h-3 text-zinc-500" data-lucide="file-warning"></i> PDF Dossier
+                    </button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-zinc-50/80 transition-colors">
+<td class="py-3 px-4 font-mono text-[11px] text-zinc-500 whitespace-nowrap">2024-10-24 13:55:02</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">
+<div class="leading-tight">Insp. P. Kulkarni</div>
+<div class="text-[10px] text-zinc-400 font-mono">SSB-7719</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-zinc-800">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="book-marked"></i> Bangladesh Passport
+                    </span>
+</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">Anisur Rahman</td>
+<td class="py-3 px-4 text-zinc-600 whitespace-nowrap">Petrapole - Gate 1</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
+<i class="w-3 h-3" data-lucide="alert-triangle"></i> High 79%
+                    </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="text-xs font-bold text-rose-700 bg-rose-100/80 px-2 py-0.5 rounded border border-rose-200">Detained</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-700 border border-zinc-200 bg-white hover:bg-zinc-50 px-2.5 py-1 rounded shadow-2xs">
+<i class="w-3 h-3 text-zinc-500" data-lucide="file-text"></i> PDF Dossier
+                    </button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-zinc-50/80 transition-colors">
+<td class="py-3 px-4 font-mono text-[11px] text-zinc-500 whitespace-nowrap">2024-10-24 13:42:19</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">
+<div class="leading-tight">Insp. R. Das</div>
+<div class="text-[10px] text-zinc-400 font-mono">SSB-6520</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-zinc-800">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="book-marked"></i> UK Passport
+                    </span>
+</td>
+<td class="py-3 px-4 font-medium text-zinc-900 whitespace-nowrap">Sarah Jenkins</td>
+<td class="py-3 px-4 text-zinc-600 whitespace-nowrap">Attari - Gate 3</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+<i class="w-3 h-3" data-lucide="shield-check"></i> Low 8%
+                    </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="text-xs font-semibold text-emerald-600">Cleared</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-700 border border-zinc-200 bg-white hover:bg-zinc-50 px-2.5 py-1 rounded shadow-2xs">
+<i class="w-3 h-3 text-zinc-500" data-lucide="file-text"></i> PDF Dossier
+                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination / Summary Footer -->
+<div class="p-4 border-t border-zinc-200/80 bg-zinc-50/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+<div class="flex items-center gap-2">
+<span>Showing <strong class="text-zinc-800">1-6</strong> of <strong class="text-zinc-800">1,482</strong> audited screening transactions</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1 text-xs border border-zinc-200 rounded bg-white text-zinc-400 cursor-not-allowed">Previous</button>
+<button class="px-2.5 py-1 text-xs border border-zinc-900 rounded bg-zinc-950 text-white font-medium">1</button>
+<button class="px-2.5 py-1 text-xs border border-zinc-200 rounded bg-white text-zinc-700 hover:bg-zinc-50">2</button>
+<button class="px-2.5 py-1 text-xs border border-zinc-200 rounded bg-white text-zinc-700 hover:bg-zinc-50">3</button>
+<span class="px-1 text-zinc-400">...</span>
+<button class="px-2.5 py-1 text-xs border border-zinc-200 rounded bg-white text-zinc-700 hover:bg-zinc-50">247</button>
+<button class="px-2.5 py-1 text-xs border border-zinc-200 rounded bg-white text-zinc-700 hover:bg-zinc-50">Next</button>
+</div>
+</div>
+</div>
+<!-- END: Audit Log Table -->
+</main>
+<!-- END: Page Content Container -->
+</div>
+<!-- END: Main Area -->
+</div>
+<!-- Lucide Icon Initialization -->
+<script data-purpose="icon-init">
+    lucide.createIcons();
+  </script>
+</body></html>

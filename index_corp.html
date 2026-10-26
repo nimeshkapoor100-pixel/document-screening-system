@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Satark Sarthi - AI-Based Fake Identity & Document Screening System</title>
+  <meta name="description" content="AI-powered border document screening and verification system for detecting fake identities and tampering." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            sidebar: '#fbfbfb',
+            canvas: '#f4f4f6',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px #09090b;
+      border-color: #09090b;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 4px; }
+    
+    .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+    /* Animations */
+    @keyframes scanLine {
+      0% { transform: translateY(-100%); opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { transform: translateY(200%); opacity: 0; }
+    }
+    .scan-overlay {
+      background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.4), transparent);
+      animation: scanLine 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .spin { animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    .screen { display: none; opacity: 0; }
+    .screen.active { 
+      display: flex; 
+      animation: fadeInSlide 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+    }
+
+    .drop-zone.drag-over { 
+      border-color: #0f172a !important; 
+      background-color: #f8fafc !important;
+      transform: scale(1.02);
+      box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15) !important;
+    }
+    
+    .file-selected-badge { display: none; }
+    .has-file .file-selected-badge { display: flex; animation: fadeInSlide 0.4s ease forwards; }
+    .has-file .drop-zone-placeholder { display: none; }
+
+    /* Staggered Step Animations */
+    .step-item { transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+    .step-pending { opacity: 0.4; transform: translateX(-4px); }
+    .step-active { opacity: 1; transform: translateX(0); border-color: rgba(15, 23, 42, 0.5) !important; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1); }
+    .step-done { opacity: 1; transform: translateX(0); border-color: rgba(16, 185, 129, 0.3) !important; }
+    
+    .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+
+    /* Card Entry Animation */
+    @keyframes cardSlideUp {
+      from { opacity: 0; transform: translateY(24px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .card-enter { 
+      opacity: 0; 
+      animation: cardSlideUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+    }
+
+    .hover-lift { transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08); }
+
+    .risk-gauge-circle {
+      transition: stroke-dasharray 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-50 via-white to-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <div class="flex flex-1 min-h-screen">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="w-[260px] bg-white/80 backdrop-blur-xl border-r border-slate-200/80 shrink-0 min-h-screen sticky top-0 h-screen select-none z-30 hidden md:flex md:flex-col justify-between shadow-[4px_0_24px_rgba(0,0,0,0.02)]" id="sidebar">
+      <div class="flex flex-col flex-1 overflow-y-auto px-4 py-6 custom-scroll">
+        
+        <!-- Logo Branding -->
+        <div class="flex items-center gap-3 px-2 mb-10 group cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-md group-hover:scale-105 group-hover:shadow-slate-900/30 transition-all duration-300">
+            <span class="material-symbols-outlined text-white text-xl group-hover:rotate-12 transition-transform duration-300">policy</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-semibold text-[15px] tracking-normal text-slate-900 leading-tight">Satark Sarthi</span>
+            <span class="text-[9px] text-slate-900 font-bold tracking-widest uppercase mt-0.5">Fake Identity Screen</span>
+          </div>
+        </div>
+        
+        <!-- Navigation Tree -->
+        <div class="text-[10px] font-bold text-slate-400 px-2 mb-3 uppercase tracking-widest">Operations Menu</div>
+        <nav class="space-y-2 text-[13px]">
+          <a id="nav-scan" onclick="showScreen('upload')" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-900 text-white font-semibold shadow-md hover:shadow-md cursor-pointer transition-all duration-300 hover:scale-[1.02]">
+            <span class="material-symbols-outlined text-[18px]">document_scanner</span>
+            <span>New Inspection</span>
+          </a>
+          <a id="nav-process" onclick="showScreen('processing')" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm cursor-pointer transition-all duration-300 hover:translate-x-1">
+            <span class="material-symbols-outlined text-[18px]">memory</span>
+            <span class="font-medium">AI Processing</span>
+          </a>
+          <a id="nav-result" onclick="showScreen('result')" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm cursor-pointer transition-all duration-300 hover:translate-x-1">
+            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            <span class="font-medium">Risk Dashboard</span>
+          </a>
+          <a id="nav-history" onclick="showScreen('history')" class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm cursor-pointer transition-all duration-300 hover:translate-x-1">
+            <span class="material-symbols-outlined text-[18px]">history</span>
+            <span class="font-medium">Case History</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Footer Action -->
+      <div class="p-4 border-t border-slate-100 bg-white/50 space-y-2">
+        <a href="/logout" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 rounded-xl hover:bg-rose-600 hover:text-white hover:border-rose-600 hover:shadow-md transition-all duration-200 active:scale-95 cursor-pointer" title="Sign out and return to Login">
+          <span class="material-symbols-outlined text-[18px]">logout</span>
+          <span>Logout</span>
+        </a>
+        <button onclick="emergencyLock()" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-[11px] font-bold text-rose-700 bg-rose-50/70 border border-rose-200/70 rounded-xl hover:bg-rose-100 transition-all duration-200 active:scale-95 cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">lock</span>
+          <span>Lock Station</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 flex flex-col min-w-0 pb-20">
+      
+      <!-- Top Navbar -->
+      <header class="h-16 bg-white/80 backdrop-blur-xl border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-20">
+        <div class="flex items-center gap-4">
+          <!-- Mobile Menu -->
+          <button onclick="toggleMobileMenu()" class="md:hidden text-slate-500 hover:text-slate-900 p-2 rounded-xl hover:bg-slate-100 transition-colors">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          
+          <div class="hidden md:flex items-center gap-2 text-xs font-medium text-slate-800 hover:bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 shadow-sm transition-all duration-300 cursor-default hover:shadow-md">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-800 pulse-dot shadow-[0_0_8px_rgba(59,130,246,0.5)]"></span>
+            <span class="font-bold text-slate-900">Border Checkpoint: DEL-T3</span>
+            <span class="text-slate-300 mx-1">|</span>
+            <span id="api-status-text" class="text-slate-500 font-mono">Core Modules Online</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span id="system-time-upload" class="text-[11px] font-mono font-bold text-slate-500 hidden sm:block bg-slate-100 border border-slate-200 px-2 py-1 rounded-md shadow-inner"></span>
+          <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
+          
+          <!-- Officer Badge -->
+          <div class="flex items-center gap-3 pl-1">
+            <div class="hidden md:flex flex-col text-right">
+              <span id="officer-name-display" class="text-[13px] font-bold text-slate-900 leading-tight">Officer Desk</span>
+              <span id="officer-id-display" class="text-[10px] text-slate-400 font-mono mt-0.5 font-bold">#OP-4491</span>
+            </div>
+            <div id="officer-initials-display" class="w-9 h-9 rounded-full bg-slate-900 flex items-center justify-center text-white text-[13px] font-bold ring-2 ring-slate-100 shadow-sm">
+              OF
+            </div>
+          </div>
+
+          <!-- Dedicated Header Logout Button -->
+          <a href="/logout" id="navbar-logout-btn-corp" class="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-200 hover:border-rose-600 rounded-xl shadow-sm transition-all duration-200 active:scale-95 cursor-pointer ml-1" title="Sign out of screening station">
+            <span class="material-symbols-outlined text-[17px]">logout</span>
+            <span>Logout</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- SCREEN 1: UPLOAD (Dual Input) -->
+      <div id="screen-upload" class="screen active flex-col flex-1 p-6 md:p-10 max-w-[1400px] w-full mx-auto relative">
+        
+        <div class="text-center mb-10 mt-4">
+          <h1 class="text-3xl md:text-4xl font-semibold tracking-normal text-slate-900 mb-3">Identity & Document Screening</h1>
+          <p class="text-[15px] text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">
+            Upload the identity document and a live capture of the passenger to run OCR extraction, tampering detection, and face verification pipelines.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
+          
+          <!-- Document Upload -->
+          <div class="flex flex-col">
+            <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-slate-900 text-[18px]">badge</span> 1. Identity Document
+            </h3>
+            <div id="drop-zone-doc" class="drop-zone flex-1 bg-white border-[3px] border-dashed border-slate-300 rounded-3xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-slate-800 hover:bg-slate-50 hover-lift relative group shadow-sm transition-all duration-300"
+                 onclick="document.getElementById('file-input-doc').click()" ondragover="handleDragOver(event, 'drop-zone-doc')" ondragleave="handleDragLeave(event, 'drop-zone-doc')" ondrop="handleDrop(event, 'doc')">
+              
+              <div class="drop-zone-placeholder flex flex-col items-center pointer-events-none w-full text-center">
+                <div class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 border border-slate-200 group-hover:scale-110 group-hover:bg-white group-hover:shadow-lg group-hover:shadow-slate-800/10 transition-all duration-500">
+                  <span class="material-symbols-outlined text-3xl text-slate-500 group-hover:text-slate-900 transition-colors">upload_file</span>
+                </div>
+                <h4 class="text-base font-bold text-slate-900 mb-1">Upload Document Image</h4>
+                <p class="text-xs font-medium text-slate-400 mb-6">Passport, Visa, Aadhaar, License</p>
+              </div>
+
+              <!-- Doc Selected Badge -->
+              <div class="file-selected-badge flex-col items-center z-10 space-y-4 w-full">
+                <div class="relative group/img">
+                  <div id="preview-doc-wrap" class="w-32 h-40 border-4 border-white rounded-2xl overflow-hidden bg-slate-100 shadow-lg hidden group-hover/img:scale-105 transition-transform duration-300">
+                    <img id="preview-doc-img" class="w-full h-full object-cover" alt="Doc preview" />
+                  </div>
+                  <div class="absolute -top-3 -right-3 w-7 h-7 bg-slate-800 rounded-full flex items-center justify-center shadow-md border-2 border-white transform scale-0 animate-[pulse_0.4s_ease-out_forwards_0.2s]">
+                    <span class="material-symbols-outlined text-white text-[14px]">check</span>
+                  </div>
+                </div>
+                <p id="name-doc" class="text-sm font-bold text-slate-900 truncate max-w-[200px]"></p>
+                <button onclick="clearFile(event, 'doc')" class="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg hover:bg-rose-100 transition-colors">Remove</button>
+              </div>
+              <input id="file-input-doc" class="hidden" type="file" accept="image/*" onchange="handleFileSelect(event, 'doc')" />
+            </div>
+          </div>
+
+          <!-- Face Upload / Capture -->
+          <div class="flex flex-col">
+            <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <span class="material-symbols-outlined text-slate-900 text-[18px]">face</span> 2. Live Passenger Photo
+            </h3>
+            <div id="drop-zone-face" class="drop-zone flex-1 bg-white border-[3px] border-dashed border-slate-300 rounded-3xl p-8 flex flex-col items-center justify-center relative shadow-sm transition-all duration-300">
+              
+              <div id="webcam-ui" class="flex flex-col items-center w-full text-center">
+                <div class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 border border-slate-200">
+                  <span class="material-symbols-outlined text-3xl text-slate-500">photo_camera</span>
+                </div>
+                <h4 class="text-base font-bold text-slate-900 mb-2">Live Capture</h4>
+                
+                <button onclick="startCamera(event)" class="bg-slate-100 text-slate-800 font-bold text-xs px-4 py-2 rounded-lg hover:bg-slate-200 transition-colors mb-4">Start Camera</button>
+                <a href="#" onclick="document.getElementById('file-input-face').click(); event.preventDefault();" class="text-xs text-slate-400 hover:text-slate-800 underline decoration-slate-300 underline-offset-4">or upload a photo instead</a>
+              </div>
+              
+              <div id="webcam-stream-ui" class="hidden flex-col items-center w-full relative">
+                 <div class="relative w-full h-48 rounded-xl mb-4 border border-slate-200 overflow-hidden bg-slate-900">
+                    <video id="webcam-video" autoplay playsinline class="w-full h-full object-cover"></video>
+                    <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+                        <div class="w-[100px] h-[130px] rounded-[50%] border-2 border-dashed border-emerald-400 shadow-[0_0_0_999px_rgba(0,0,0,0.6)]"></div>
+                    </div>
+                    <div class="absolute bottom-3 inset-x-0 text-center text-white text-[10px] font-bold tracking-widest drop-shadow-md z-10 pointer-events-none uppercase">Align Face Inside</div>
+                 </div>
+                 <button onclick="capturePhoto(event)" class="bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-full shadow-md hover:bg-slate-800 w-full">Capture</button>
+              </div>
+
+              <!-- Face Selected Badge -->
+              <div class="file-selected-badge flex-col items-center z-10 space-y-4 w-full justify-center hidden" id="face-badge-ui">
+                <div class="relative group/img">
+                  <div id="preview-face-wrap" class="w-24 h-24 border-4 border-white rounded-full overflow-hidden bg-slate-100 shadow-lg transition-transform duration-300">
+                    <img id="preview-face-img" class="w-full h-full object-cover" alt="Face preview" />
+                  </div>
+                  <div class="absolute top-0 right-0 w-7 h-7 bg-slate-800 rounded-full flex items-center justify-center shadow-md border-2 border-white transform scale-100">
+                    <span class="material-symbols-outlined text-white text-[14px]">check</span>
+                  </div>
+                </div>
+                <p id="name-face" class="text-sm font-bold text-slate-900 truncate max-w-[200px]">Live Capture</p>
+                <button onclick="clearFile(event, 'face')" class="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg hover:bg-rose-100 transition-colors">Retake / Remove</button>
+              </div>
+              <input id="file-input-face" class="hidden" type="file" accept="image/*" onchange="handleFileSelect(event, 'face')" />
+              <canvas id="webcam-canvas" class="hidden"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div id="upload-error" class="hidden mt-8 max-w-2xl mx-auto bg-rose-50 border border-rose-200 rounded-xl p-4 flex items-start justify-center gap-3 shadow-sm animate-[fadeInSlide_0.3s_ease-out]">
+          <span class="material-symbols-outlined text-rose-600 mt-0.5 text-[20px]">error</span>
+          <p id="upload-error-text" class="text-sm text-rose-800 font-bold leading-relaxed"></p>
+        </div>
+
+        <div class="mt-12 flex justify-center w-full">
+          <button id="analyze-btn" onclick="startAnalysis()" class="bg-slate-900 text-white font-extrabold text-[15px] px-12 py-4 rounded-2xl hover:bg-slate-800 transition-all duration-300 flex items-center gap-3 shadow-lg shadow-slate-900/30 hover:-translate-y-1 active:translate-y-0 active:scale-95">
+            <span class="material-symbols-outlined group-hover:animate-pulse text-[22px]">policy</span>
+            Run AI Assessment
+          </button>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: PROCESSING (SIH Modules) -->
+      <div id="screen-processing" class="screen flex-col flex-1 p-6 md:p-8 max-w-[800px] w-full mx-auto justify-center">
+        <div class="bg-white/90 backdrop-blur-md border border-slate-200 rounded-3xl p-10 shadow-2xl shadow-slate-900/5 flex flex-col items-center relative overflow-hidden">
+          
+          <div class="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+
+          <div class="relative w-64 h-48 bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden mb-10 shadow-inner flex items-center justify-center shadow-[inset_0_2px_30px_rgba(0,0,0,0.5)]">
+            <span class="material-symbols-outlined text-slate-800 drop-shadow-[0_0_25px_rgba(59,130,246,0.8)]" style="font-size:64px; animation: pulse 1.5s infinite ease-in-out;">view_in_ar</span>
+            <div class="absolute inset-0 scan-overlay h-full w-full pointer-events-none"></div>
+          </div>
+
+          <h2 class="text-2xl font-semibold text-slate-900 mb-2 tracking-normal">AI Pipeline Active</h2>
+          <p class="text-sm font-mono font-bold text-slate-900 mb-10" style="animation: pulse 2s infinite;">Executing Core Security Modules…</p>
+
+          <div class="w-full max-w-md space-y-4 relative z-10">
+            <!-- Module 1 -->
+            <div id="step-1" class="step-item flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 step-pending shadow-sm">
+              <div class="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 shadow-inner">
+                <span id="step-1-icon" class="material-symbols-outlined text-slate-400 text-[18px]">pending</span>
+              </div>
+              <div class="flex-1">
+                <span class="text-xs font-semibold text-slate-800 uppercase tracking-widest block mb-1">Module 1: OCR Extraction</span>
+                <span id="step-1-sub" class="text-[10px] font-mono font-bold text-slate-400">Extracting fields from document image...</span>
+              </div>
+            </div>
+            <!-- Module 2 -->
+            <div id="step-2" class="step-item flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 step-pending shadow-sm">
+              <div class="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 shadow-inner">
+                <span id="step-2-icon" class="material-symbols-outlined text-slate-400 text-[18px]">pending</span>
+              </div>
+              <div class="flex-1">
+                <span class="text-xs font-semibold text-slate-800 uppercase tracking-widest block mb-1">Module 2: Document Validation</span>
+                <span id="step-2-sub" class="text-[10px] font-mono font-bold text-slate-400">Verifying official standards & expiry...</span>
+              </div>
+            </div>
+            <!-- Module 3 -->
+            <div id="step-3" class="step-item flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 step-pending shadow-sm">
+              <div class="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 shadow-inner">
+                <span id="step-3-icon" class="material-symbols-outlined text-slate-400 text-[18px]">pending</span>
+              </div>
+              <div class="flex-1">
+                <span class="text-xs font-semibold text-slate-800 uppercase tracking-widest block mb-1">Module 3: Tampering Detection</span>
+                <span id="step-3-sub" class="text-[10px] font-mono font-bold text-slate-400">AI analysis for forgery & photo replacement...</span>
+              </div>
+            </div>
+            <!-- Module 4 -->
+            <div id="step-4" class="step-item flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 step-pending shadow-sm">
+              <div class="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 shadow-inner">
+                <span id="step-4-icon" class="material-symbols-outlined text-slate-400 text-[18px]">pending</span>
+              </div>
+              <div class="flex-1">
+                <span class="text-xs font-semibold text-slate-800 uppercase tracking-widest block mb-1">Module 4: Face Verification</span>
+                <span id="step-4-sub" class="text-[10px] font-mono font-bold text-slate-400">Matching document owner to live identity...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 3: RESULT -->
+      <div id="screen-result" class="screen flex-col flex-1 p-6 md:p-8 max-w-[1400px] w-full mx-auto space-y-6">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 flex-wrap">
+            <button onclick="resetToUpload()" class="w-10 h-10 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-600 hover:bg-slate-900 hover:text-white hover:border-slate-900 shadow-sm hover:shadow-md transition-all duration-300 group">
+              <span class="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform duration-300">arrow_back</span>
+            </button>
+            <div>
+              <h1 class="text-xl md:text-2xl font-semibold tracking-normal text-slate-900 flex items-center gap-3">
+                Risk Assessment Dashboard
+                <span id="result-doc-type-badge" class="inline-flex items-center px-2.5 py-1 text-[10px] font-semibold text-white bg-slate-800 rounded-md uppercase tracking-widest"></span>
+              </h1>
+              <span id="result-doc-id" class="text-xs font-mono font-bold text-slate-500 mt-1 block"></span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 self-start md:self-auto">
+            <button onclick="resetToUpload()" class="px-5 py-2.5 text-[13px] font-semibold text-white bg-slate-900 rounded-xl hover:bg-slate-800 shadow-md hover:shadow-lg hover:shadow-slate-900/20 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">add_circle</span> New Inspection
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- LEFT COLUMN: Risk Score, Tampering, Face Match -->
+          <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Overall Risk Score -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-md hover:shadow-md transition-shadow duration-300 relative overflow-hidden card-enter">
+              <div class="absolute top-0 left-0 w-full h-1" id="risk-top-border"></div>
+              <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[16px]">speed</span> Overall Risk Score
+              </h2>
+              
+              <div class="flex flex-col items-center justify-center mb-4">
+                <div class="relative w-32 h-32 flex items-center justify-center">
+                  <!-- SVG Gauge -->
+                  <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#f3f4f6" stroke-width="8"></circle>
+                    <circle id="risk-gauge-path" class="risk-gauge-circle" cx="50" cy="50" r="45" fill="none" stroke="#059669" stroke-width="8" stroke-dasharray="0 283" stroke-linecap="round"></circle>
+                  </svg>
+                  <div class="absolute flex flex-col items-center justify-center">
+                    <span id="risk-score-value" class="text-4xl font-semibold text-slate-900 tracking-normal">--</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">/ 100</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div id="risk-verdict-box" class="p-3 rounded-xl border text-center font-bold text-sm tracking-wide">
+                --
+              </div>
+            </div>
+
+            <!-- Database Face Verification -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-md card-enter" style="animation-delay: 100ms;">
+              <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-widest mb-5 flex items-center justify-between">
+                <span class="flex items-center gap-2"><span class="material-symbols-outlined text-slate-900 text-[18px]">badge</span> Database Identity Match</span>
+                <span class="text-[9px] bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full">DB CHECK</span>
+              </h2>
+              
+              <div class="flex items-center justify-between gap-4 mb-4">
+                <div class="flex flex-col items-center flex-1">
+                  <div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100 mb-2 flex items-center justify-center shadow-sm">
+                    <img id="res-face-doc-db" src="" alt="Doc Photo" class="w-full h-full object-cover hidden"/>
+                    <span class="material-symbols-outlined text-3xl text-slate-300">person</span>
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase">Document</span>
+                </div>
+                
+                <div class="flex flex-col items-center justify-center">
+                  <span id="face-match-percent-db" class="text-xl font-semibold text-slate-900">--%</span>
+                  <span class="text-[9px] font-bold text-slate-400 uppercase">Match</span>
+                </div>
+
+                <div class="flex flex-col items-center flex-1">
+                  <div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100 mb-2 flex items-center justify-center shadow-sm">
+                    <span class="material-symbols-outlined text-3xl text-slate-300">database</span>
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase">Database</span>
+                </div>
+              </div>
+              <div id="face-verdict-db" class="text-center text-[11px] font-bold py-1.5 rounded bg-slate-50 border border-slate-100 text-slate-500">
+                Awaiting Analysis
+              </div>
+            </div>
+
+            <!-- Live Face Verification -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-md card-enter" style="animation-delay: 150ms;">
+              <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-widest mb-5 flex items-center justify-between">
+                <span class="flex items-center gap-2"><span class="material-symbols-outlined text-slate-900 text-[18px]">photo_camera</span> Live Identity Match</span>
+                <span class="text-[9px] bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full">LIVE CHECK</span>
+              </h2>
+              
+              <div class="flex items-center justify-between gap-4 mb-4">
+                <div class="flex flex-col items-center flex-1">
+                  <div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100 mb-2 flex items-center justify-center shadow-sm">
+                    <img id="res-face-doc-live" src="" alt="Doc Photo" class="w-full h-full object-cover hidden"/>
+                    <span class="material-symbols-outlined text-3xl text-slate-300">person</span>
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase">Document</span>
+                </div>
+                
+                <div class="flex flex-col items-center justify-center">
+                  <span id="face-match-percent-live" class="text-xl font-semibold text-slate-900">--%</span>
+                  <span class="text-[9px] font-bold text-slate-400 uppercase">Match</span>
+                </div>
+
+                <div class="flex flex-col items-center flex-1">
+                  <div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-200 bg-slate-100 mb-2 flex items-center justify-center shadow-sm">
+                    <img id="res-face-live-img" src="" alt="Live Photo" class="w-full h-full object-cover hidden"/>
+                    <span class="material-symbols-outlined text-3xl text-slate-300">photo_camera</span>
+                  </div>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase">Live Input</span>
+                </div>
+              </div>
+              <div id="face-verdict-live" class="text-center text-[11px] font-bold py-1.5 rounded bg-slate-50 border border-slate-100 text-slate-500">
+                Awaiting Analysis
+              </div>
+            </div>
+
+            <!-- Tampering Detection (Module 3) -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-md card-enter" style="animation-delay: 200ms;">
+              <h2 class="text-xs font-semibold text-slate-900 uppercase tracking-widest mb-5 flex items-center justify-between">
+                <span class="flex items-center gap-2"><span class="material-symbols-outlined text-purple-600 text-[18px]">policy</span> Tampering Det.</span>
+                <span class="text-[9px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">MODULE 3</span>
+              </h2>
+              
+              <div class="space-y-4" id="tampering-checks-list">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: OCR & Validation -->
+          <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Module 1: OCR Extraction -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-md card-enter" style="animation-delay: 150ms;">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-indigo-600 text-[20px]">document_scanner</span>
+                  </div>
+                  <h2 class="text-base font-semibold text-slate-900">OCR Extracted Data</h2>
+                </div>
+                <span class="text-[10px] font-semibold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full uppercase tracking-widest">Module 1</span>
+              </div>
+              <div id="result-cards" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- Module 2: Document Validation -->
+            <div class="bg-white border border-slate-200 rounded-3xl shadow-md overflow-hidden card-enter" style="animation-delay: 250ms;">
+              <div class="p-5 md:p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-amber-600 text-[20px]">fact_check</span>
+                  </div>
+                  <h2 class="text-base font-semibold text-slate-900">Document Validation Rules</h2>
+                </div>
+                <span class="text-[10px] font-semibold bg-amber-100 text-orange-700 px-3 py-1 rounded-full uppercase tracking-widest">Module 2</span>
+              </div>
+              <div id="validation-details-rows" class="flex flex-col p-2"></div>
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+    
+    <!-- HISTORY SCREEN -->
+    <div id="screen-history" class="screen flex-col flex-1 p-6 md:p-8 max-w-[1400px] w-full mx-auto space-y-6">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-xl md:text-2xl font-semibold text-slate-900 tracking-normal flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-900">history</span>
+            Case History
+          </h1>
+          <p class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-1">Review past investigations</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="hist-status-filter" onchange="loadHistory()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl focus:ring-slate-800 focus:border-slate-800 block p-2.5 font-bold outline-none">
+            <option value="All">All Statuses</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Flagged">Flagged</option>
+          </select>
+          <select id="hist-doc-filter" onchange="loadHistory()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl focus:ring-slate-800 focus:border-slate-800 block p-2.5 font-bold outline-none">
+            <option value="All">All Documents</option>
+            <option value="Passport">Passport</option>
+            <option value="Aadhaar">Aadhaar</option>
+            <option value="Driving_License">Driving License</option>
+            <option value="Visa">Visa</option>
+            <option value="Permit">Permit</option>
+          </select>
+          <button onclick="loadHistory()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors">
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- List Content -->
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden w-full">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              <th class="p-4 pl-6">Date / Time</th>
+              <th class="p-4">Document Type</th>
+              <th class="p-4">Status</th>
+              <th class="p-4">Risk Score</th>
+              <th class="p-4">Reviewed By</th>
+              <th class="p-4 pr-6 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body" class="text-sm">
+            <!-- Rows populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+  <script>
+    let files = { doc: null, face: null };
+    let stepTimer = null;
+
+    function showScreen(name) {
+      ['upload', 'processing', 'result', 'history'].forEach(s => {
+          const screen = document.getElementById('screen-' + s);
+          if (screen) screen.classList.remove('active');
+      });
+      document.getElementById('screen-' + name).classList.add('active');
+      
+      const navMap = { 'upload': 'nav-scan', 'processing': 'nav-process', 'result': 'nav-result', 'history': 'nav-history' };
+      Object.keys(navMap).forEach(s => {
+          const nav = document.getElementById(navMap[s]);
+          if (nav) {
+              if (s === name || (name === 'upload' && s === 'upload')) {
+                  nav.className = 'flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-900 text-white font-semibold shadow-md cursor-pointer transition-all duration-300 hover:scale-[1.02]';
+              } else {
+                  nav.className = 'flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm cursor-pointer transition-all duration-300 hover:translate-x-1';
+              }
+          }
+      });
+      
+      if (name === 'history') {
+          loadHistory();
+      }
+    }
+    
+    async function loadHistory() {
+        const status = document.getElementById('hist-status-filter').value;
+        const docType = document.getElementById('hist-doc-filter').value;
+        const tbody = document.getElementById('history-table-body');
+        
+        tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400 font-bold"><span class="material-symbols-outlined spin text-2xl">autorenew</span><br>Loading history...</td></tr>';
+        
+        try {
+            const res = await fetch(`/api/history?limit=50&status=${status}&document_type=${docType}`);
+            const data = await res.json();
+            
+            tbody.innerHTML = '';
+            if (!data.history || data.history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400 font-bold">No records found.</td></tr>';
+                return;
+            }
+            
+            data.history.forEach(item => {
+                const dateStr = item.created_at ? new Date(item.created_at).toLocaleString() : 'N/A';
+                
+                let statusBadge = '';
+                if (item.status === 'approved') statusBadge = '<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">Approved</span>';
+                else if (item.status === 'rejected') statusBadge = '<span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">Rejected</span>';
+                else if (item.status === 'flagged') statusBadge = '<span class="bg-amber-100 text-orange-700 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">Flagged</span>';
+                else statusBadge = `<span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">${item.status}</span>`;
+                
+                let scoreText = item.final_trust_score !== undefined ? `${Math.round(100 - item.final_trust_score)}` : '--';
+                
+                tbody.innerHTML += `
+                  <tr class="border-b border-slate-50 hover:bg-slate-50/80 transition-colors">
+                    <td class="p-4 pl-6 font-mono text-xs text-slate-600">${dateStr}</td>
+                    <td class="p-4 font-bold text-slate-800">${item.document_type || 'Unknown'}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 font-semibold text-slate-700">${scoreText}</td>
+                    <td class="p-4 text-xs font-bold text-slate-500">${item.reviewed_by || 'Auto System'}</td>
+                    <td class="p-4 pr-6 text-right">
+                      <button onclick="viewHistoryResult('${item.task_id}')" class="px-4 py-1.5 bg-white border border-slate-200 hover:border-slate-800 hover:text-slate-900 text-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm">View</button>
+                    </td>
+                  </tr>
+                `;
+            });
+        } catch (err) {
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-rose-500 font-bold">Error loading history.</td></tr>';
+        }
+    }
+    
+    async function viewHistoryResult(taskId) {
+        showScreen('processing');
+        try {
+            const res = await fetch(`/api/history/${taskId}`);
+            const data = await res.json();
+            
+            // Clear current mock files so it doesn't render local active files on top of history
+            files = { doc: null, face: null };
+            document.getElementById('res-face-doc-db').classList.add('hidden');
+            document.getElementById('res-face-doc-db').nextElementSibling.classList.remove('hidden');
+            document.getElementById('res-face-doc-live').classList.add('hidden');
+            document.getElementById('res-face-doc-live').nextElementSibling.classList.remove('hidden');
+            document.getElementById('res-face-live-img').classList.add('hidden');
+            document.getElementById('res-face-live-img').nextElementSibling.classList.remove('hidden');
+            
+            renderResult(data);
+            showScreen('result');
+            
+            // Re-highlight the history nav even though we are on the result screen visually
+            document.getElementById('nav-history').className = 'flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-900 text-white font-semibold shadow-md cursor-pointer transition-all duration-300 hover:scale-[1.02]';
+            document.getElementById('nav-result').className = 'flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm cursor-pointer transition-all duration-300 hover:translate-x-1';
+            
+        } catch (err) {
+            showScreen('history');
+            alert("Could not load case details.");
+        }
+    }
+
+    function handleFileSelect(event, type) {
+      const file = event.target.files[0];
+      if (file) setFile(file, type);
+    }
+    function handleDragOver(event, id) { event.preventDefault(); document.getElementById(id).classList.add('drag-over'); }
+    function handleDragLeave(event, id) { document.getElementById(id).classList.remove('drag-over'); }
+    function handleDrop(event, type) {
+      event.preventDefault();
+      document.getElementById('drop-zone-' + type).classList.remove('drag-over');
+      const file = event.dataTransfer.files[0];
+      if (file) setFile(file, type);
+    }
+
+    let videoStream = null;
+
+    async function startCamera(e) {
+        e.preventDefault();
+        const video = document.getElementById('webcam-video');
+        document.getElementById('webcam-ui').classList.add('hidden');
+        document.getElementById('webcam-stream-ui').classList.remove('hidden');
+        document.getElementById('webcam-stream-ui').classList.add('flex');
+        document.getElementById('face-badge-ui').classList.add('hidden');
+        document.getElementById('face-badge-ui').classList.remove('flex');
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 } } });
+            video.srcObject = videoStream;
+        } catch (err) {
+            alert('Camera access denied or unavailable.');
+            document.getElementById('webcam-ui').classList.remove('hidden');
+            document.getElementById('webcam-stream-ui').classList.add('hidden');
+            document.getElementById('webcam-stream-ui').classList.remove('flex');
+        }
+    }
+
+    function capturePhoto(e) {
+        e.preventDefault();
+        const video = document.getElementById('webcam-video');
+        const canvas = document.getElementById('webcam-canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+        
+        canvas.toBlob((blob) => {
+            const file = new File([blob], "live_capture.jpg", { type: "image/jpeg" });
+            setFile(file, 'face');
+        }, 'image/jpeg', 1.0);
+    }
+
+    function setFile(file, type) {
+      files[type] = file;
+      document.getElementById('drop-zone-' + type).classList.add('has-file');
+      document.getElementById('name-' + type).textContent = file.name;
+
+      if (type === 'face') {
+          document.getElementById('webcam-ui').classList.add('hidden');
+          document.getElementById('webcam-stream-ui').classList.add('hidden');
+          document.getElementById('webcam-stream-ui').classList.remove('flex');
+          document.getElementById('face-badge-ui').classList.remove('hidden');
+          document.getElementById('face-badge-ui').classList.add('flex');
+      }
+
+      const imgWrap = document.getElementById('preview-' + type + '-wrap');
+      const img = document.getElementById('preview-' + type + '-img');
+      
+      img.src = URL.createObjectURL(file);
+      if (imgWrap) imgWrap.classList.remove('hidden');
+      img.classList.remove('hidden');
+      
+      hideUploadError();
+    }
+
+    function clearFile(event, type) {
+      event.stopPropagation();
+      files[type] = null;
+      document.getElementById('file-input-' + type).value = '';
+      document.getElementById('drop-zone-' + type).classList.remove('has-file');
+      
+      if (type === 'face') {
+          document.getElementById('webcam-ui').classList.remove('hidden');
+          document.getElementById('webcam-stream-ui').classList.add('hidden');
+          document.getElementById('webcam-stream-ui').classList.remove('flex');
+          document.getElementById('face-badge-ui').classList.add('hidden');
+          document.getElementById('face-badge-ui').classList.remove('flex');
+          if (videoStream) {
+              videoStream.getTracks().forEach(track => track.stop());
+              videoStream = null;
+          }
+      }
+      
+      setTimeout(() => {
+        const wrap = document.getElementById('preview-' + type + '-wrap');
+        if (wrap) wrap.classList.add('hidden');
+      }, 100);
+    }
+
+    function showUploadError(msg) {
+      document.getElementById('upload-error-text').textContent = msg;
+      document.getElementById('upload-error').classList.remove('hidden');
+    }
+    function hideUploadError() { document.getElementById('upload-error').classList.add('hidden'); }
+
+    let analysisStartTime = 0;
+    async function startAnalysis() {
+      if (!files.doc) { showUploadError('Please upload an Identity Document.'); return; }
+      // Face photo is optional for the API, but highly recommended for SIH context
+      hideUploadError();
+      showScreen('processing');
+      analysisStartTime = Date.now();
+      resetSteps();
+      runStepAnimation();
+
+      const formData = new FormData();
+      formData.append('file', files.doc); // Using existing API endpoint
+      if (files.face) {
+        // Simulating sending the live photo to backend
+        formData.append('face_file', files.face); 
+      }
+
+      try {
+        const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+        const data = await response.json();
+        if (data.error && !data.task_id) {
+          clearTimeout(stepTimer); showScreen('upload'); showUploadError(data.error); return;
+        }
+        if (data.task_id) pollStatus(data.task_id);
+      } catch (err) {
+        clearTimeout(stepTimer); showScreen('upload'); showUploadError('Connection error.');
+      }
+    }
+
+    async function pollStatus(taskId) {
+      try {
+        const response = await fetch(`/api/status/${taskId}`);
+        const data = await response.json();
+        if (data.status === 'pending') {
+          setTimeout(() => pollStatus(taskId), 2000);
+        } else {
+          const elapsed = Date.now() - analysisStartTime;
+          const remaining = Math.max(0, 3500 - elapsed);
+          setTimeout(() => {
+            clearTimeout(stepTimer);
+            finishSteps();
+            setTimeout(() => { 
+               const finalElapsed = Date.now() - analysisStartTime;
+               const secs = (finalElapsed / 1000).toFixed(1);
+               const badge = document.getElementById('processing-time-badge');
+               if (badge) badge.textContent = `Processed in ${secs}s`;
+               renderResult(data); 
+               showScreen('result'); 
+            }, 800);
+          }, remaining);
+        }
+      } catch (err) {
+        clearTimeout(stepTimer); showScreen('upload'); showUploadError('Status check failed.');
+      }
+    }
+
+    const STEPS = [ { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 } ];
+    function resetSteps() {
+      STEPS.forEach(s => {
+        const el = document.getElementById('step-' + s.id);
+        el.className = 'step-item flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 step-pending shadow-sm';
+        const icon = document.getElementById('step-' + s.id + '-icon');
+        icon.textContent = 'pending'; icon.style.color = '#94a3b8'; icon.classList.remove('spin');
+      });
+    }
+
+    function activateStep(idx) {
+      if(idx >= STEPS.length) return;
+      const el = document.getElementById('step-' + STEPS[idx].id);
+      el.classList.remove('step-pending'); el.classList.add('step-active');
+      const icon = document.getElementById('step-' + STEPS[idx].id + '-icon');
+      icon.textContent = 'progress_activity'; icon.classList.add('spin'); icon.style.color = '#0f172a';
+    }
+
+    function completeStep(idx) {
+      if(idx >= STEPS.length) return;
+      const el = document.getElementById('step-' + STEPS[idx].id);
+      el.classList.remove('step-active'); el.classList.add('step-done');
+      const icon = document.getElementById('step-' + STEPS[idx].id + '-icon');
+      icon.textContent = 'check_circle'; icon.classList.remove('spin'); icon.style.color = '#059669';
+    }
+
+    function runStepAnimation() {
+      setTimeout(() => activateStep(0), 100);
+      stepTimer = setTimeout(() => {
+        completeStep(0); setTimeout(() => activateStep(1), 200);
+        stepTimer = setTimeout(() => {
+          completeStep(1); setTimeout(() => activateStep(2), 200);
+          stepTimer = setTimeout(() => {
+            completeStep(2); setTimeout(() => activateStep(3), 200);
+          }, 800);
+        }, 800);
+      }, 800);
+    }
+    function finishSteps() { STEPS.forEach((_, i) => completeStep(i)); }
+
+    function renderResult(data) {
+      let riskScore = 100;
+      if (data.final_trust_score !== undefined) {
+          riskScore = Math.round(100 - data.final_trust_score);
+      }
+      
+      const passed = data.validation_status === 'Passed' && riskScore < 50;
+      const docType = data.document_type || 'Unknown';
+      const fields = data.fields || {};
+      const details = data.validation_details || {};
+      
+      document.getElementById('result-doc-type-badge').textContent = docType.toUpperCase();
+      const docId = fields.passport_number || fields.aadhaar_number || fields.license_number || fields.visa_number || fields.permit_number || Math.random().toString(36).substring(2, 10).toUpperCase();
+      document.getElementById('result-doc-id').textContent = 'REF ID: ' + docId.slice(0, 12);
+
+      // 1. Overall Risk Score
+      const riskPath = document.getElementById('risk-gauge-path');
+      const riskValEl = document.getElementById('risk-score-value');
+      const riskBox = document.getElementById('risk-verdict-box');
+      const riskTop = document.getElementById('risk-top-border');
+      
+      let riskColor = passed ? '#059669' : '#e11d48';
+      if (!passed && riskScore < 70) riskColor = '#d97706';
+
+      setTimeout(() => {
+        const circumference = 2 * Math.PI * 45;
+        const offset = circumference - (riskScore / 100) * circumference;
+        riskPath.style.strokeDasharray = `${circumference} ${circumference}`;
+        riskPath.style.strokeDashoffset = offset;
+        riskPath.style.stroke = riskColor;
+      }, 300);
+
+      riskValEl.textContent = riskScore;
+      riskValEl.style.color = riskColor;
+      riskTop.style.backgroundColor = riskColor;
+      
+      riskBox.className = `p-3 rounded-xl border text-center font-semibold text-sm tracking-widest uppercase mt-4`;
+      if (passed) {
+        riskBox.textContent = 'CLEARANCE GRANTED';
+        riskBox.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+      } else {
+        riskBox.textContent = 'HIGH RISK DETECTED';
+        riskBox.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-200');
+      }
+
+      // 2. Face Verifications (Module 4)
+      const docFaceSrc = data.cropped_doc_face || (files && files.doc ? URL.createObjectURL(files.doc) : '');
+      const liveFaceSrc = (files && files.face ? URL.createObjectURL(files.face) : '') || data.cropped_live_face || '';
+
+      const docDbImg = document.getElementById('res-face-doc-db');
+      const docLiveImg = document.getElementById('res-face-doc-live');
+      const liveImg = document.getElementById('res-face-live-img');
+
+      if (docFaceSrc) { 
+          docDbImg.src = docFaceSrc; 
+          docDbImg.classList.remove('hidden'); 
+          if (docDbImg.nextElementSibling) docDbImg.nextElementSibling.classList.add('hidden'); 
+
+          docLiveImg.src = docFaceSrc; 
+          docLiveImg.classList.remove('hidden'); 
+          if (docLiveImg.nextElementSibling) docLiveImg.nextElementSibling.classList.add('hidden'); 
+      } else {
+          docDbImg.src = '';
+          docDbImg.classList.add('hidden');
+          if (docDbImg.nextElementSibling) docDbImg.nextElementSibling.classList.remove('hidden');
+          
+          docLiveImg.src = '';
+          docLiveImg.classList.add('hidden');
+          if (docLiveImg.nextElementSibling) docLiveImg.nextElementSibling.classList.remove('hidden');
+      }
+      
+      if (liveFaceSrc) { 
+          liveImg.src = liveFaceSrc; 
+          liveImg.classList.remove('hidden'); 
+          if (liveImg.nextElementSibling) liveImg.nextElementSibling.classList.add('hidden'); 
+      } else {
+          liveImg.src = '';
+          liveImg.classList.add('hidden');
+          if (liveImg.nextElementSibling) liveImg.nextElementSibling.classList.remove('hidden');
+      }
+
+      const matchDbEl = document.getElementById('face-match-percent-db');
+      const verdictDbEl = document.getElementById('face-verdict-db');
+      if (data.database_face_score !== undefined) {
+          const score = Math.round(data.database_face_score);
+          matchDbEl.textContent = score + '%';
+          matchDbEl.style.color = score >= 55 ? '#059669' : '#e11d48';
+          const dbPassed = details.database_face_match?.passed;
+          verdictDbEl.textContent = dbPassed ? 'Verified against database' : 'Biometric mismatch';
+          verdictDbEl.className = `text-center text-[11px] font-bold py-1.5 rounded border mt-4 ${dbPassed ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}`;
+      } else {
+          matchDbEl.textContent = '--%';
+          matchDbEl.style.color = '#94a3b8';
+          verdictDbEl.textContent = 'Not evaluated (document rejected before face check)';
+          verdictDbEl.className = 'text-center text-[11px] font-bold py-1.5 rounded bg-slate-50 border border-slate-200 text-slate-500 mt-4';
+      }
+      
+      const matchLiveEl = document.getElementById('face-match-percent-live');
+      const verdictLiveEl = document.getElementById('face-verdict-live');
+      if (data.live_face_score !== undefined) {
+          const score = Math.round(data.live_face_score);
+          matchLiveEl.textContent = score + '%';
+          matchLiveEl.style.color = score >= 55 ? '#059669' : '#e11d48';
+          const lPassed = details.live_identity_match?.passed;
+          verdictLiveEl.textContent = lPassed ? 'Live identity verified' : 'Live mismatch detected';
+          verdictLiveEl.className = `text-center text-[11px] font-bold py-1.5 rounded border mt-4 ${lPassed ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}`;
+      } else {
+          matchLiveEl.textContent = '--%';
+          matchLiveEl.style.color = '#94a3b8';
+          verdictLiveEl.textContent = 'No live photo captured';
+          verdictLiveEl.className = 'text-center text-[11px] font-bold py-1.5 rounded bg-slate-50 border border-slate-200 text-slate-500 mt-4';
+      }
+
+      // 3. Tampering Checks (Module 3)
+      const tamperContainer = document.getElementById('tampering-checks-list');
+      tamperContainer.innerHTML = '';
+      
+      const tdata = [
+          { label: 'Overall Tampering Risk', score: data.tampering_risk_score },
+          { label: 'Photo Replacement / Text Manipulation (ELA)', score: data.ela_score },
+          { label: 'Photo Replacement / Text Manipulation (Noise)', score: data.noise_score },
+          { label: 'Stamp Forgery Detection', score: data.stamp_score }
+      ];
+      
+      tdata.forEach(check => {
+        if (check.score === undefined) return;
+        const scoreVal = Math.round(check.score);
+        tamperContainer.innerHTML += `
+          <div class="mb-3">
+            <div class="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+              <span>${check.label}</span>
+              <span>${scoreVal}%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 shadow-inner">
+              <div class="bg-slate-800 h-2 rounded-full transition-all duration-1000" style="width: ${scoreVal}%"></div>
+            </div>
+          </div>
+        `;
+      });
+      
+      if (data.exif_flags !== undefined) {
+        const flagCount = data.exif_flags.length;
+        const metaColor = flagCount === 0 ? 'text-emerald-600' : 'text-rose-500';
+        const metaIcon = flagCount === 0 ? 'check_circle' : 'warning';
+        const metaText = flagCount === 0 ? 'Clean' : 'Suspicious Metadata';
+        const metaDetails = flagCount > 0 ? `<div class="text-[9px] text-rose-600 mt-1">${data.exif_flags.join(', ')}</div>` : '';
+        
+        tamperContainer.innerHTML += `
+          <div class="mb-3 mt-4 pt-4 border-t border-slate-100">
+            <div class="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+              <span>Image Metadata Analysis</span>
+              <span class="${metaColor} flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">${metaIcon}</span> ${metaText}</span>
+            </div>
+            ${metaDetails}
+          </div>
+        `;
+      }
+      
+      const tpassed = details.tampering_check?.passed !== false;
+      const tcolor = tpassed ? 'text-emerald-600' : 'text-rose-500';
+      const ticon = tpassed ? 'check_circle' : 'warning';
+      tamperContainer.innerHTML += `
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-slate-100">
+            <span class="material-symbols-outlined text-[18px] ${tcolor}">${ticon}</span>
+            <span class="text-xs font-bold text-slate-700">${tpassed ? 'No tampering indicators found' : 'Tampering risk detected'}</span>
+          </div>
+      `;
+
+      // 4. OCR Cards (Module 1)
+      renderFieldCards(docType, fields, details, passed);
+
+      // 5. Validation Details (Module 2)
+      renderValidationDetails(details);
+    }
+
+    const FIELD_DEFS = {
+      Passport: [
+        { key: 'name', label: 'FULL NAME', icon: 'person', fmt: v => v },
+        { key: 'passport_number', label: 'PASSPORT NO.', icon: 'badge', fmt: v => v },
+        { key: 'nationality', label: 'NATIONALITY', icon: 'public', fmt: v => v },
+        { key: 'dob', label: 'DATE OF BIRTH', icon: 'cake', fmt: v => v },
+        { key: 'expiry', label: 'EXPIRY DATE', icon: 'event', fmt: v => v },
+        { key: 'gender', label: 'GENDER', icon: 'person_pin', fmt: v => v },
+      ],
+      Aadhaar: [
+        { key: 'name', label: 'FULL NAME', icon: 'person', fmt: v => v },
+        { key: 'aadhaar_number', label: 'AADHAAR NO.', icon: 'badge', fmt: v => v },
+        { key: 'dob', label: 'DATE OF BIRTH', icon: 'cake', fmt: v => v },
+        { key: 'gender', label: 'GENDER', icon: 'person_pin', fmt: v => v },
+      ],
+      Driving_License: [
+        { key: 'name', label: 'FULL NAME', icon: 'person', fmt: v => v },
+        { key: 'license_number', label: 'LICENSE NO.', icon: 'badge', fmt: v => v },
+        { key: 'dob', label: 'DATE OF BIRTH', icon: 'cake', fmt: v => v },
+        { key: 'expiry', label: 'EXPIRY DATE', icon: 'event', fmt: v => v },
+      ],
+      Visa: [
+        { key: 'name', label: 'FULL NAME', icon: 'person', fmt: v => v },
+        { key: 'visa_number', label: 'VISA NO.', icon: 'badge', fmt: v => v },
+        { key: 'visa_type', label: 'VISA TYPE', icon: 'category', fmt: v => v },
+        { key: 'issue_date', label: 'ISSUE DATE', icon: 'event', fmt: v => v },
+        { key: 'expiry', label: 'EXPIRY DATE', icon: 'event', fmt: v => v },
+        { key: 'gender', label: 'GENDER', icon: 'person_pin', fmt: v => v },
+        { key: 'entry_validation', label: 'ENTRY VALIDATION', icon: 'flight_land', fmt: v => v },
+        { key: 'stay_duration', label: 'STAY DURATION', icon: 'schedule', fmt: v => v },
+      ],
+      Permit: [
+        { key: 'name', label: 'HOLDER NAME', icon: 'person', fmt: v => v },
+        { key: 'permit_number', label: 'PERMIT NO.', icon: 'badge', fmt: v => v },
+        { key: 'expiry', label: 'EXPIRY DATE', icon: 'event', fmt: v => v },
+      ]
+    };
+
+    function renderFieldCards(docType, fields, details, globalPassed) {
+      const container = document.getElementById('result-cards');
+      container.innerHTML = '';
+      const defs = FIELD_DEFS[docType] || Object.keys(fields).map(k => ({ key: k, label: k.toUpperCase().replace(/_/g, ' '), icon: 'data_object', fmt: v => v }));
+
+      defs.forEach((def, idx) => {
+        const rawVal = fields[def.key] || 'Not Detected';
+        const value = def.fmt(rawVal);
+        const det = details[def.key] || details[def.key.replace('_number', '')] || null;
+        const fieldOk = det ? det.passed : (rawVal && rawVal !== 'Not Detected' && rawVal !== 'Not Detected (Watermark Noise)');
+        const reason = det ? det.reason : '';
+
+        const card = document.createElement('div');
+        card.className = 'bg-white border border-slate-200 rounded-2xl shadow-sm hover-lift card-enter flex flex-col overflow-hidden';
+        card.style.animationDelay = (idx * 50) + 'ms';
+
+        const statusColor = fieldOk ? '#059669' : '#e11d48';
+        const statusIcon = fieldOk ? 'check_circle' : 'cancel';
+        const statusLabel = reason || (fieldOk ? 'Verified' : 'Flagged');
+        const headerBg = fieldOk ? 'bg-indigo-50/30' : 'bg-rose-50/30';
+
+        card.innerHTML = `
+          <div class="border-b border-slate-100 px-4 py-3 flex items-center gap-2 ${headerBg}">
+            <span class="material-symbols-outlined text-slate-400" style="font-size:16px">${def.icon}</span>
+            <h3 class="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">${def.label}</h3>
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <div class="text-sm font-bold text-slate-900 font-mono mb-3 truncate" title="${value}">${value}</div>
+            <div class="flex items-center gap-1.5 mt-auto" style="color:${statusColor}">
+              <span class="material-symbols-outlined" style="font-size:16px; font-variation-settings:'FILL' 1">${statusIcon}</span>
+              <span class="text-[9px] font-semibold tracking-widest uppercase">${statusLabel}</span>
+            </div>
+          </div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function renderValidationDetails(details) {
+      const container = document.getElementById('validation-details-rows');
+      container.innerHTML = '';
+      if (!details || Object.keys(details).length === 0) {
+        container.innerHTML = '<p class="p-6 text-xs font-mono font-medium text-slate-500 text-center">No validation details available.</p>';
+        return;
+      }
+      
+      const entries = Object.entries(details).filter(([k]) => k !== 'tampering_check'); // Handled separately now
+      entries.forEach(([key, det], idx) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between px-6 py-4 hover:bg-slate-50/80 transition-colors border-b border-slate-100 last:border-0 card-enter';
+        row.style.animationDelay = (idx * 50) + 'ms';
+        
+        const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        const color = det.passed ? '#059669' : '#e11d48';
+        const icon = det.passed ? 'check_circle' : 'cancel';
+
+        row.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center bg-white shadow-sm border border-slate-100">
+              <span class="material-symbols-outlined" style="font-size:14px; color:${color}; font-variation-settings:'FILL' 1">${icon}</span>
+            </div>
+            <span class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">${label}</span>
+          </div>
+          <span class="font-mono font-bold text-slate-500 text-[10px] text-right max-w-[200px] leading-tight">${det.reason || ''}</span>`;
+        container.appendChild(row);
+      });
+    }
+
+    function resetToUpload() {
+      if (videoStream) {
+          videoStream.getTracks().forEach(track => track.stop());
+          videoStream = null;
+      }
+
+      files = { doc: null, face: null };
+      document.getElementById('file-input-doc').value = '';
+      document.getElementById('file-input-face').value = '';
+      document.getElementById('drop-zone-doc').classList.remove('has-file');
+      document.getElementById('drop-zone-face').classList.remove('has-file');
+      
+      document.getElementById('webcam-ui').classList.remove('hidden');
+      document.getElementById('webcam-stream-ui').classList.add('hidden');
+      document.getElementById('webcam-stream-ui').classList.remove('flex');
+      document.getElementById('face-badge-ui').classList.add('hidden');
+      document.getElementById('face-badge-ui').classList.remove('flex');
+      
+      const riskPath = document.getElementById('risk-gauge-path');
+      if (riskPath) { riskPath.style.strokeDashoffset = 283; }
+
+      setTimeout(() => {
+        document.getElementById('preview-doc-wrap').classList.add('hidden');
+        document.getElementById('preview-face-wrap').classList.add('hidden');
+      }, 100);
+      
+      hideUploadError(); resetSteps(); showScreen('upload');
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const el = document.getElementById('system-time-upload');
+      if (el) el.textContent = now.toUTCString().slice(17, 25) + ' UTC';
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    (async function checkApiHealth() {
+      try {
+        const res = await fetch('/api/health');
+        if (!res.ok) throw new Error('fail');
+        document.getElementById('api-status-text').textContent = 'Core Modules Online';
+      } catch {
+        document.getElementById('api-status-text').textContent = 'Modules Offline';
+        document.getElementById('api-status-text').style.color = '#e11d48';
+        const dot = document.querySelector('.pulse-dot');
+        if (dot) { dot.style.backgroundColor = '#e11d48'; dot.style.animation = 'none'; dot.style.boxShadow = 'none'; }
+      }
+    })();
+
+    function emergencyLock() {
+      if (confirm("Lock Station and sign out?")) {
+        window.location.href = "/logout";
+      }
+    }
+
+    async function syncOfficerSession() {
+      try {
+        const res = await fetch('/api/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated && data.user) {
+            const u = data.user;
+            const nameEl = document.getElementById('officer-name-display');
+            const idEl = document.getElementById('officer-id-display');
+            const initEl = document.getElementById('officer-initials-display');
+            if (nameEl && u.name) nameEl.textContent = u.name;
+            if (idEl && u.officer_id) idEl.textContent = u.officer_id;
+            if (initEl && u.name) {
+              const p = u.name.split(' ');
+              initEl.textContent = p.map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'OF';
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Could not sync officer session:', e);
+      }
+    }
+    syncOfficerSession();
+  </script>
+</body>
+</html>

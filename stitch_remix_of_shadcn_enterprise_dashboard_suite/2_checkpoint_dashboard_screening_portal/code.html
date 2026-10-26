@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SSB AI Document Screening — Indo-Nepal Checkpoint</title>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Lucide Icons via CDN -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: '#e5e7eb',
+            background: '#fcfcfc',
+            foreground: '#09090b',
+            muted: '#71717a',
+            sidebar: '#fafafa',
+            card: '#ffffff'
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars-and-resets">
+    body {
+      background-color: #f4f4f5;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Thin subtle scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-900 flex flex-col p-4 md:p-6 lg:p-8 bg-[#f8f9fa]">
+<!-- Outer Canvas Container -->
+<div class="max-w-[1536px] w-full mx-auto flex flex-col lg:flex-row gap-6 items-start">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-full lg:w-64 shrink-0 flex flex-col justify-between self-stretch bg-transparent pr-0 lg:pr-2">
+<div class="flex flex-col gap-5">
+<!-- Logo Branding -->
+<div class="flex items-center gap-2.5 px-2 py-1">
+<div class="w-7 h-7 rounded-md bg-zinc-900 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+<i class="w-4 h-4 text-emerald-400" data-lucide="shield-check"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-semibold text-[14px] tracking-tight text-zinc-900 leading-tight">SSB Screening</span>
+<span class="text-[10px] text-zinc-400 font-medium uppercase tracking-wider">Govt of India</span>
+</div>
+</div>
+<!-- Search Input -->
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-400">
+<i class="w-4 h-4" data-lucide="search"></i>
+</div>
+<input class="w-full pl-9 pr-10 py-1.5 bg-white border border-zinc-200 rounded-lg text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400 focus:border-zinc-400 transition" placeholder="Search passport, ID, case..." type="text"/>
+<div class="absolute inset-y-0 right-0 pr-2 flex items-center">
+<kbd class="px-1.5 py-0.5 text-[10px] font-medium bg-zinc-100 text-zinc-500 rounded border border-zinc-200">⌘K</kbd>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col space-y-1 text-[13px]">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 px-2 pt-2 pb-1">Operations</span>
+<!-- Active Item -->
+<a class="flex items-center gap-2.5 px-3 py-2 bg-zinc-200/70 text-zinc-900 font-medium rounded-lg transition-colors" href="#">
+<i class="w-4 h-4 text-zinc-900" data-lucide="layout-dashboard"></i>
+<span>Dashboard</span>
+</a>
+<!-- Standard Links -->
+<a class="flex items-center justify-between px-3 py-1.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<i class="w-4 h-4 text-zinc-500 group-hover:text-zinc-900" data-lucide="scan-line"></i>
+<span>Scan Document</span>
+</div>
+<span class="px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 bg-emerald-50 rounded-full border border-emerald-200">Live</span>
+</a>
+<a class="flex items-center justify-between px-3 py-1.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors group" href="#">
+<div class="flex items-center gap-2.5">
+<i class="w-4 h-4 text-zinc-500 group-hover:text-zinc-900" data-lucide="briefcase"></i>
+<span>Case Management</span>
+</div>
+<span class="w-5 h-5 flex items-center justify-center text-[10px] font-semibold text-rose-600 bg-rose-50 rounded-full border border-rose-200">3</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors" href="#">
+<i class="w-4 h-4 text-zinc-500" data-lucide="bar-chart-3"></i>
+<span>Analytics &amp; Audit</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors" href="#">
+<i class="w-4 h-4 text-zinc-500" data-lucide="settings"></i>
+<span>Admin Settings</span>
+</a>
+</nav>
+</div>
+<!-- Station Status Card -->
+<div class="mt-8 bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold">Active Unit</span>
+<span class="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online
+  </span>
+</div>
+<h4 class="font-semibold text-[13px] text-zinc-900">Station: ICP Raxaul</h4>
+<p class="text-[11px] text-zinc-500 leading-relaxed">
+  Terminal 2 • Booth Cluster A<br/>Biometric &amp; UV Sensors Active
+</p>
+<div class="pt-2 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
+<span>Node ID: #RX-04-B</span>
+<span class="text-zinc-400">v2.4.1</span>
+</div>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContentPanel -->
+<main class="flex-1 w-full bg-white border border-zinc-200 rounded-2xl shadow-sm p-5 md:p-7 flex flex-col gap-6">
+<!-- Top Navigation / Workspace Bar -->
+<div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-zinc-100">
+<!-- Workspace Switcher / Checkpoint Badge -->
+<div class="flex items-center gap-3">
+<button class="text-zinc-400 hover:text-zinc-600">
+<i class="w-4 h-4" data-lucide="sidebar"></i>
+</button>
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-md bg-zinc-50 border border-zinc-200 text-xs font-semibold text-zinc-800">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Indo-Nepal Checkpoint (Raxaul) • Terminal Gate 2</span>
+<i class="w-3 h-3 text-zinc-400" data-lucide="chevrons-up-down"></i>
+</div>
+</div>
+<!-- Right Quick Actions -->
+<div class="flex items-center gap-3 text-zinc-600">
+<button class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-zinc-900 hover:bg-black rounded-md shadow-xs transition">
+<i class="w-3.5 h-3.5" data-lucide="scan"></i>
+<span>Scan New Document</span>
+</button>
+<div class="relative cursor-pointer hover:text-zinc-900 p-1">
+<i class="w-4 h-4" data-lucide="bell"></i>
+<span class="absolute top-0 right-0 w-4 h-4 bg-rose-500 text-white font-bold text-[9px] flex items-center justify-center rounded-full ring-2 ring-white">3</span>
+</div>
+<button class="hover:text-zinc-900 p-1" title="Toggle Theme">
+<i class="w-4 h-4" data-lucide="moon"></i>
+</button>
+<div class="h-4 w-px bg-zinc-200"></div>
+<!-- Officer Info Dropdown -->
+<div class="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-zinc-50 cursor-pointer">
+<div class="w-6 h-6 rounded-full bg-zinc-800 text-white flex items-center justify-center text-[10px] font-bold ring-1 ring-zinc-200">RK</div>
+<div class="flex flex-col text-left">
+<span class="text-xs font-medium text-zinc-800 leading-tight">Insp. Rajesh Kumar</span>
+<span class="text-[10px] text-zinc-400 leading-none">SSB-8842</span>
+</div>
+<i class="w-3 h-3 text-zinc-400 ml-1" data-lucide="chevron-down"></i>
+</div>
+</div>
+</div>
+<!-- Dismissible Alert Banner -->
+<div class="rounded-lg border border-red-200 bg-red-50/80 p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs" id="alert-banner">
+<div class="flex items-start gap-2.5 text-red-900">
+<i class="w-4 h-4 text-red-600 mt-0.5 shrink-0" data-lucide="alert-octagon"></i>
+<div>
+<span class="font-semibold text-red-950 uppercase tracking-wide text-[11px] mr-1.5 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded">CRITICAL ALERT</span>
+<span>Interpol Red Notice match detected on Passport <strong>#P9823411</strong> at Booth 4 (12 mins ago). Case <strong>#SSB-2024-8902</strong> flagged for immediate supervisor intervention.</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+<button class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white font-medium rounded text-[11px] shadow-xs transition">View Case</button>
+<button class="px-2 py-1 text-red-700 hover:bg-red-100 rounded text-[11px] font-medium transition" onclick="document.getElementById('alert-banner').remove()">Dismiss</button>
+</div>
+</div>
+<!-- Dashboard Title & Action Row -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl font-bold tracking-tight text-zinc-900">Checkpoint Dashboard — Indo-Nepal ICP Raxaul</h1>
+<p class="text-xs text-zinc-500 mt-0.5 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+<span>Live Monitoring: 24 Oct 2024, 14:32 IST</span>
+</p>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-zinc-900 hover:bg-black rounded-md shadow-xs transition">
+<i class="w-3.5 h-3.5" data-lucide="scan-line"></i>
+<span>Scan New Document</span>
+</button>
+</div>
+</div>
+<!-- BEGIN: 4 Key Metrics Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="border border-zinc-200 rounded-xl p-4 bg-white flex flex-col justify-between shadow-xs">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-semibold text-zinc-600">Documents Screened Today</h3>
+<i class="w-4 h-4 text-zinc-400" data-lucide="file-check"></i>
+</div>
+<div class="my-2">
+<div class="text-2xl font-bold tracking-tight text-zinc-900">1,428</div>
+<div class="text-[11px] text-emerald-600 font-medium mt-0.5 flex items-center gap-1">
+<i class="w-3 h-3" data-lucide="trending-up"></i>
+<span class="font-semibold">+12.4%</span> <span class="text-zinc-400 font-normal">vs daily avg</span>
+</div>
+</div>
+<!-- Mini Bar Sparkline -->
+<div class="flex items-end gap-1 h-6 pt-1">
+<div class="w-full bg-zinc-900 rounded-xs h-3"></div>
+<div class="w-full bg-zinc-900 rounded-xs h-4"></div>
+<div class="w-full bg-zinc-900 rounded-xs h-5"></div>
+<div class="w-full bg-zinc-900 rounded-xs h-4"></div>
+<div class="w-full bg-zinc-900 rounded-xs h-6"></div>
+<div class="w-full bg-zinc-900 rounded-xs h-5"></div>
+<div class="w-full bg-zinc-900 rounded-xs h-6"></div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="border border-zinc-200 rounded-xl p-4 bg-white flex flex-col justify-between shadow-xs">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-semibold text-zinc-600">High-Risk Flags</h3>
+<i class="w-4 h-4 text-rose-500" data-lucide="shield-alert"></i>
+</div>
+<div class="my-2">
+<div class="text-2xl font-bold tracking-tight text-rose-600">14</div>
+<div class="text-[11px] font-medium mt-0.5">
+<span class="px-1.5 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200 font-medium">14 Detected (0.98%)</span>
+</div>
+</div>
+<div class="text-[11px] text-zinc-400 flex items-center justify-between pt-2 border-t border-zinc-100">
+<span>4 Detained</span>
+<span class="text-amber-600">10 Under Review</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="border border-zinc-200 rounded-xl p-4 bg-white flex flex-col justify-between shadow-xs">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-semibold text-zinc-600">Avg. Processing Time</h3>
+<i class="w-4 h-4 text-zinc-400" data-lucide="gauge"></i>
+</div>
+<div class="my-2">
+<div class="text-2xl font-bold tracking-tight text-zinc-900">18.4s</div>
+<div class="text-[11px] font-medium mt-0.5">
+<span class="px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">-3.2s AI Latency</span>
+</div>
+</div>
+<div class="text-[11px] text-zinc-400 flex items-center justify-between pt-2 border-t border-zinc-100">
+<span>AI Inference: 1.8s</span>
+<span>Biometrics: 4.1s</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="border border-zinc-200 rounded-xl p-4 bg-white flex flex-col justify-between shadow-xs">
+<div class="flex items-center justify-between">
+<h3 class="text-xs font-semibold text-zinc-600">Queue Length</h3>
+<i class="w-4 h-4 text-zinc-400" data-lucide="users"></i>
+</div>
+<div class="my-2">
+<div class="text-2xl font-bold tracking-tight text-zinc-900">6 Pax</div>
+<div class="text-[11px] font-medium mt-0.5">
+<span class="px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">Normal Flow (3 Active Booths)</span>
+</div>
+</div>
+<div class="text-[11px] text-zinc-400 flex items-center justify-between pt-2 border-t border-zinc-100">
+<span>Booth 1: 2 pax</span>
+<span>Booth 2: 3 pax</span>
+<span>Booth 3: 1 pax</span>
+</div>
+</div>
+</div>
+<!-- END: 4 Key Metrics Cards -->
+<!-- BEGIN: Main Section Layout (Recent Scans + Analytics Sidebar) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+<!-- Left/Main (65% width) - Recent Scans Table -->
+<div class="lg:col-span-8 border border-zinc-200 rounded-xl p-5 bg-white flex flex-col justify-between">
+<div>
+<!-- Section Header -->
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="text-xs font-semibold text-zinc-900">Recent Scans</h3>
+<p class="text-[11px] text-zinc-500">Live feed of passenger documents screened across active checkpoint booths.</p>
+</div>
+<button class="flex items-center gap-1 text-xs px-2.5 py-1 border border-zinc-200 rounded-md text-zinc-700 hover:bg-zinc-50">
+<i class="w-3 h-3 text-zinc-500" data-lucide="refresh-cw"></i>
+<span>Auto-Refresh: ON</span>
+</button>
+</div>
+<!-- Table Filter Row -->
+<div class="flex items-center justify-between gap-3 mb-4">
+<div class="relative w-full max-w-xs">
+<i class="w-3.5 h-3.5 absolute left-3 top-2.5 text-zinc-400" data-lucide="search"></i>
+<input class="w-full pl-8 pr-3 py-1.5 text-xs border border-zinc-200 rounded-md placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-400" placeholder="Filter passenger or doc ID..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 px-3 py-1.5 border border-zinc-200 rounded-md text-xs font-medium text-zinc-700 hover:bg-zinc-50">
+<i class="w-3 h-3 text-zinc-400" data-lucide="filter"></i>
+<span>Filter Risk</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 border border-zinc-200 rounded-md text-xs font-medium text-zinc-700 hover:bg-zinc-50">
+<span>View All</span>
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="chevron-right"></i>
+</button>
+</div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead>
+<tr class="border-b border-zinc-100 text-zinc-500 font-medium">
+<th class="py-2.5 font-normal">Passenger Name</th>
+<th class="py-2.5 font-normal">Document Type</th>
+<th class="py-2.5 font-normal">Timestamp</th>
+<th class="py-2.5 font-normal">Risk Score</th>
+<th class="py-2.5 font-normal">Status</th>
+<th class="py-2.5 text-right font-normal">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-zinc-100 text-zinc-800">
+<!-- Row 1 -->
+<tr class="hover:bg-zinc-50/60 transition-colors">
+<td class="py-3 font-medium text-zinc-900">Tenzing Norbu</td>
+<td class="py-3 text-zinc-600">Nepal Passport (E-Psp)</td>
+<td class="py-3 text-zinc-500 font-mono text-[11px]">14:28:10</td>
+<td class="py-3">
+<span class="px-2 py-0.5 text-[11px] rounded-full font-medium text-emerald-700 bg-emerald-50 border border-emerald-200">Low 4%</span>
+</td>
+<td class="py-3">
+<span class="text-emerald-700 font-medium flex items-center gap-1 text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Cleared
+    </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-[11px] font-medium text-zinc-800 hover:text-black border border-zinc-200 hover:border-zinc-300 px-2 py-1 rounded bg-white shadow-2xs">View Scan</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-red-50/30 transition-colors bg-red-50/10">
+<td class="py-3 font-medium text-zinc-900">MD. Asif Ali</td>
+<td class="py-3 text-zinc-600">National ID Card</td>
+<td class="py-3 text-zinc-500 font-mono text-[11px]">14:24:35</td>
+<td class="py-3">
+<span class="px-2 py-0.5 text-[11px] rounded-full font-medium text-rose-700 bg-rose-50 border border-rose-200">High 88%</span>
+</td>
+<td class="py-3">
+<span class="text-rose-700 font-medium flex items-center gap-1 text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Detained / Tampered
+    </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-[11px] font-medium text-rose-700 hover:text-rose-900 border border-rose-200 hover:bg-rose-50 px-2 py-1 rounded bg-white shadow-2xs">View Scan</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-zinc-50/60 transition-colors">
+<td class="py-3 font-medium text-zinc-900">Sarah Jenkins</td>
+<td class="py-3 text-zinc-600">UK Citizen Passport</td>
+<td class="py-3 text-zinc-500 font-mono text-[11px]">14:21:02</td>
+<td class="py-3">
+<span class="px-2 py-0.5 text-[11px] rounded-full font-medium text-emerald-700 bg-emerald-50 border border-emerald-200">Low 8%</span>
+</td>
+<td class="py-3">
+<span class="text-emerald-700 font-medium flex items-center gap-1 text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Cleared
+    </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-[11px] font-medium text-zinc-800 hover:text-black border border-zinc-200 hover:border-zinc-300 px-2 py-1 rounded bg-white shadow-2xs">View Scan</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-amber-50/30 transition-colors">
+<td class="py-3 font-medium text-zinc-900">Vikramaditya Singh</td>
+<td class="py-3 text-zinc-600">Indian Aadhaar Card</td>
+<td class="py-3 text-zinc-500 font-mono text-[11px]">14:15:40</td>
+<td class="py-3">
+<span class="px-2 py-0.5 text-[11px] rounded-full font-medium text-amber-800 bg-amber-50 border border-amber-200">Medium 54%</span>
+</td>
+<td class="py-3">
+<span class="text-amber-700 font-medium flex items-center gap-1 text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Supervisor Review
+    </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-[11px] font-medium text-zinc-800 hover:text-black border border-zinc-200 hover:border-zinc-300 px-2 py-1 rounded bg-white shadow-2xs">View Scan</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-red-50/30 transition-colors bg-red-50/10">
+<td class="py-3 font-medium text-zinc-900">Chen Wei</td>
+<td class="py-3 text-zinc-600">Emergency Certificate</td>
+<td class="py-3 text-zinc-500 font-mono text-[11px]">14:09:12</td>
+<td class="py-3">
+<span class="px-2 py-0.5 text-[11px] rounded-full font-medium text-rose-700 bg-rose-50 border border-rose-200">High 92%</span>
+</td>
+<td class="py-3">
+<span class="text-rose-700 font-medium flex items-center gap-1 text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Blacklist Hit
+    </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-[11px] font-medium text-rose-700 hover:text-rose-900 border border-rose-200 hover:bg-rose-50 px-2 py-1 rounded bg-white shadow-2xs">View Scan</button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-zinc-50/60 transition-colors">
+<td class="py-3 font-medium text-zinc-900">Priya Sharma</td>
+<td class="py-3 text-zinc-600">Indian Passport</td>
+<td class="py-3 text-zinc-500 font-mono text-[11px]">14:02:18</td>
+<td class="py-3">
+<span class="px-2 py-0.5 text-[11px] rounded-full font-medium text-emerald-700 bg-emerald-50 border border-emerald-200">Low 2%</span>
+</td>
+<td class="py-3">
+<span class="text-emerald-700 font-medium flex items-center gap-1 text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Cleared
+    </span>
+</td>
+<td class="py-3 text-right">
+<button class="text-[11px] font-medium text-zinc-800 hover:text-black border border-zinc-200 hover:border-zinc-300 px-2 py-1 rounded bg-white shadow-2xs">View Scan</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Pagination Row -->
+<div class="flex items-center justify-between pt-4 border-t border-zinc-100 text-xs text-zinc-500">
+<span>Showing 1 - 6 of 1,428 documents</span>
+<div class="flex items-center gap-1.5">
+<button class="p-1 border border-zinc-200 rounded-md hover:bg-zinc-50 text-zinc-400 hover:text-zinc-700">
+<i class="w-4 h-4" data-lucide="chevron-left"></i>
+</button>
+<button class="p-1 border border-zinc-200 rounded-md hover:bg-zinc-50 text-zinc-600 hover:text-zinc-900">
+<i class="w-4 h-4" data-lucide="chevron-right"></i>
+</button>
+</div>
+</div>
+</div>
+<!-- Right (35% width) - 7-Day Trend Chart & Threat Breakdown -->
+<div class="lg:col-span-4 flex flex-col gap-5">
+<!-- 7-Day Screening Trend Card -->
+<div class="border border-zinc-200 rounded-xl p-5 bg-white flex flex-col justify-between shadow-xs">
+<div>
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-xs font-semibold text-zinc-900">7-Day Screening Trend</h3>
+<span class="text-[10px] text-zinc-400 font-mono">18 - 24 Oct</span>
+</div>
+<p class="text-[11px] text-zinc-500 mb-3">Daily scan volume with fraud detection anomaly overlay.</p>
+<!-- Chart Legend -->
+<div class="flex items-center gap-4 text-[10px] text-zinc-500 mb-2">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-0.5 bg-zinc-900 rounded"></span> Total Scans
+        </div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-0.5 bg-rose-500 rounded"></span> Fraud Flags (x10)
+        </div>
+</div>
+<!-- Line Graph SVG -->
+<div class="h-36 w-full pt-2">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 120">
+<!-- Horizontal Grid Lines -->
+<line stroke="#f1f5f9" stroke-width="1" x1="0" x2="300" y1="20" y2="20"></line>
+<line stroke="#f1f5f9" stroke-width="1" x1="0" x2="300" y1="60" y2="60"></line>
+<line stroke="#f1f5f9" stroke-width="1" x1="0" x2="300" y1="100" y2="100"></line>
+<!-- Fraud Line (Red) -->
+<polyline fill="none" points="15,108 65,102 115,95 165,85 215,80 265,90" stroke="#ef4444" stroke-dasharray="3 2" stroke-width="1.5"></polyline>
+<!-- Total Scans Line (Black) -->
+<!-- Mon: 1,240 (y=75), Tue: 1,380 (y=55), Wed: 1,410 (y=50), Thu: 1,520 (y=32), Fri: 1,600 (y=18), Sat: 1,428 (y=46) -->
+<polyline fill="none" points="15,75 65,55 115,50 165,32 215,18 265,46" stroke="#09090b" stroke-width="2.5"></polyline>
+<!-- Black Curve Dots -->
+<circle cx="15" cy="75" fill="#fff" r="3" stroke="#09090b" stroke-width="1.5"></circle>
+<circle cx="65" cy="55" fill="#fff" r="3" stroke="#09090b" stroke-width="1.5"></circle>
+<circle cx="115" cy="50" fill="#fff" r="3" stroke="#09090b" stroke-width="1.5"></circle>
+<circle cx="165" cy="32" fill="#fff" r="3" stroke="#09090b" stroke-width="1.5"></circle>
+<circle cx="215" cy="18" fill="#fff" r="3" stroke="#09090b" stroke-width="1.5"></circle>
+<circle cx="265" cy="46" fill="#fff" r="3" stroke="#09090b" stroke-width="1.5"></circle>
+</svg>
+</div>
+<!-- X-Axis Labels -->
+<div class="flex justify-between text-[10px] text-zinc-400 pt-2 border-t border-zinc-100 font-mono">
+<div class="text-center"><span>Mon</span><br/><span class="text-zinc-600 font-sans">1.24k</span></div>
+<div class="text-center"><span>Tue</span><br/><span class="text-zinc-600 font-sans">1.38k</span></div>
+<div class="text-center"><span>Wed</span><br/><span class="text-zinc-600 font-sans">1.41k</span></div>
+<div class="text-center"><span>Thu</span><br/><span class="text-zinc-600 font-sans">1.52k</span></div>
+<div class="text-center"><span>Fri</span><br/><span class="text-zinc-600 font-sans">1.60k</span></div>
+<div class="text-center font-bold text-zinc-900"><span>Sat</span><br/><span class="text-zinc-900 font-sans">1.42k</span></div>
+</div>
+</div>
+</div>
+<!-- Today's Threat Breakdown Card -->
+<div class="border border-zinc-200 rounded-xl p-5 bg-white flex flex-col justify-between shadow-xs">
+<div>
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-xs font-semibold text-zinc-900">Today's Threat Breakdown</h3>
+<span class="text-[10px] font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">14 Alerts</span>
+</div>
+<p class="text-[11px] text-zinc-500 mb-4">Categorized anomaly distribution across optical &amp; database checks.</p>
+<div class="space-y-3">
+<!-- Item 1 -->
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-zinc-700 font-medium flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="image"></i> Photo Tampering
+            </span>
+<span class="font-semibold text-zinc-900">6 <span class="text-[10px] text-zinc-400 font-normal">(42.8%)</span></span>
+</div>
+<div class="w-full bg-zinc-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-rose-500 h-full rounded-full" style="width: 43%"></div>
+</div>
+</div>
+<!-- Item 2 -->
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-zinc-700 font-medium flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="binary"></i> MRZ Format Checksum Fail
+            </span>
+<span class="font-semibold text-zinc-900">4 <span class="text-[10px] text-zinc-400 font-normal">(28.6%)</span></span>
+</div>
+<div class="w-full bg-zinc-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full" style="width: 29%"></div>
+</div>
+</div>
+<!-- Item 3 -->
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-zinc-700 font-medium flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="shield-x"></i> Watchlist Hit
+            </span>
+<span class="font-semibold text-zinc-900">3 <span class="text-[10px] text-zinc-400 font-normal">(21.4%)</span></span>
+</div>
+<div class="w-full bg-zinc-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-red-600 h-full rounded-full" style="width: 21%"></div>
+</div>
+</div>
+<!-- Item 4 -->
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-zinc-700 font-medium flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-zinc-400" data-lucide="user-x"></i> Impersonation / Face Mismatch
+            </span>
+<span class="font-semibold text-zinc-900">1 <span class="text-[10px] text-zinc-400 font-normal">(7.1%)</span></span>
+</div>
+<div class="w-full bg-zinc-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-zinc-800 h-full rounded-full" style="width: 7%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Threat Action Footer -->
+<div class="pt-4 mt-2 border-t border-zinc-100">
+<button class="w-full py-1.5 border border-zinc-200 hover:bg-zinc-50 rounded-md text-xs font-medium text-zinc-700 transition flex items-center justify-center gap-1.5">
+<i class="w-3.5 h-3.5 text-zinc-500" data-lucide="file-text"></i>
+<span>Download Incident Log (PDF)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Main Section Layout -->
+</main>
+<!-- END: MainContentPanel -->
+</div>
+<!-- Initialize Lucide Icons -->
+<script data-purpose="icon-initialization">
+    lucide.createIcons();
+  </script>
+</body></html>

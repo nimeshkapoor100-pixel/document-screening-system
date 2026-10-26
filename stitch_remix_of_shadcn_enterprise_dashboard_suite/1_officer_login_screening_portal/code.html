@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Officer Login - AI-Based Fake Identity &amp; Document Screening System</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols for security/badge/lock/eye icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with forms and container plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brandDark: '#0A1120',
+            govNavy: '#0F172A',
+            govBlue: '#1E293B',
+            borderGray: '#E2E8F0',
+            textMuted: '#64748B',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-overrides">
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .security-grid-bg {
+      background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-white text-zinc-900 selection:bg-zinc-800 selection:text-white min-h-screen">
+<!-- BEGIN: MainLayout -->
+<main class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+<!-- BEGIN: LeftHeroMedia -->
+<!-- Left side panel: Security & border-control official branding -->
+<section class="relative hidden lg:flex flex-col justify-between p-12 lg:p-16 xl:p-20 bg-slate-950 text-white overflow-hidden select-none" data-purpose="hero-visual">
+<!-- Background decorative grid and glow -->
+<div class="absolute inset-0 security-grid-bg pointer-events-none opacity-80"></div>
+<div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-900/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-900/15 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Top Branding / Crest Section -->
+<div class="relative z-10 space-y-6">
+<div class="flex items-center space-x-3">
+<!-- Official Security Badge Icon Placeholder -->
+<div class="w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center shadow-lg shadow-black/40 text-blue-400">
+<span class="material-symbols-outlined text-2xl">shield_person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold uppercase tracking-widest text-blue-400">Sashastra Seema Bal</span>
+<span class="text-[11px] tracking-wide text-slate-400 font-medium">Ministry of Home Affairs • Govt. of India</span>
+</div>
+</div>
+<div class="pt-8 space-y-4 max-w-lg">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-medium tracking-wide bg-blue-950/80 border border-blue-800/60 text-blue-300">
+<span class="material-symbols-outlined text-xs text-blue-400">verified_user</span>
+      AI-Powered Border Document Inspection System
+    </div>
+<h1 class="text-3xl xl:text-4xl font-bold tracking-tight text-white leading-tight">
+      AI-Based Fake Identity &amp; Document Screening System
+    </h1>
+<p class="text-sm xl:text-base text-slate-400 leading-relaxed font-normal">
+      SSB / Ministry of Home Affairs • Border Security &amp; Immigration Screening Wing
+    </p>
+</div>
+</div>
+<!-- Middle Security Feature Highlights -->
+<div class="relative z-10 my-auto py-8 grid grid-cols-2 gap-4 max-w-lg">
+<div class="p-3.5 rounded-lg bg-slate-900/70 border border-slate-800/80 backdrop-blur-sm">
+<div class="flex items-center gap-2 text-slate-300 text-xs font-medium mb-1">
+<span class="material-symbols-outlined text-sm text-emerald-400">document_scanner</span>
+      Forensic OCR Engine
+    </div>
+<p class="text-[11px] text-slate-500">Real-time spectral &amp; microprint tampering detection</p>
+</div>
+<div class="p-3.5 rounded-lg bg-slate-900/70 border border-slate-800/80 backdrop-blur-sm">
+<div class="flex items-center gap-2 text-slate-300 text-xs font-medium mb-1">
+<span class="material-symbols-outlined text-sm text-blue-400">hub</span>
+      Inter-Agency Sync
+    </div>
+<p class="text-[11px] text-slate-500">Live watchlist query with National CCTNS &amp; INTERPOL</p>
+</div>
+</div>
+<!-- Bottom Security Clearance Notice Banner -->
+<div class="relative z-10 pt-4">
+<div class="rounded-lg bg-amber-950/30 border border-amber-500/20 p-3.5 flex items-start gap-3 backdrop-blur-sm max-w-lg">
+<span class="material-symbols-outlined text-amber-400 text-lg shrink-0 mt-0.5">lock</span>
+<div class="space-y-0.5">
+<p class="text-xs font-medium text-amber-300 tracking-wide uppercase">
+        Restricted Access
+      </p>
+<p class="text-[11px] text-slate-400 leading-normal">
+        Authorized Law Enforcement &amp; Immigration Personnel Only. Unauthorized access attempts are monitored, recorded, and prosecuted under applicable IT and Security Acts.
+      </p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: LeftHeroMedia -->
+<!-- BEGIN: RightAuthContent -->
+<!-- Right half with clean Shadcn UI officer authentication form -->
+<section class="flex flex-col justify-between items-center px-6 py-10 lg:px-16 xl:px-20 bg-white" data-purpose="auth-container">
+<!-- Top alignment spacer for balance -->
+<div class="w-full max-w-[420px] flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2 text-zinc-600 lg:invisible">
+<span class="material-symbols-outlined text-zinc-800 text-xl">shield_person</span>
+<span class="text-xs font-semibold text-zinc-900">SSB MHA Screening Portal</span>
+</div>
+<div class="flex items-center space-x-1.5 text-[11px] text-zinc-500 font-medium">
+<span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+<span>Govt Gateway v2.4.1</span>
+</div>
+</div>
+<div class="w-full max-w-[420px] flex flex-col space-y-6 my-auto py-4">
+<!-- BEGIN: HeaderSection -->
+<header class="space-y-1.5">
+<div class="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 mb-1">
+<span class="material-symbols-outlined text-sm text-zinc-700">badge</span>
+  Secure Terminal Authentication
+</div>
+<h2 class="text-2xl font-bold tracking-tight text-zinc-900">
+  Officer Login
+</h2>
+<p class="text-sm text-zinc-500 font-normal">
+  Enter your credentials and select your checkpoint station to sign in.
+</p>
+</header>
+<!-- END: HeaderSection -->
+<!-- BEGIN: LoginForm -->
+<form class="space-y-4" data-purpose="officer-login-form" onsubmit="event.preventDefault();">
+<!-- Officer ID / Username -->
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-zinc-700" for="officerId">Officer ID / Service Number</label>
+<div class="relative">
+<input class="w-full h-10 px-3.5 pr-9 rounded-md border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-zinc-900 transition-colors shadow-sm" id="officerId" name="officerId" placeholder="e.g. SSB-88429-DEL" required="" type="text"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-zinc-400 text-lg pointer-events-none">id_card</span>
+</div>
+</div>
+<!-- Password Input with eye toggle -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="block text-xs font-medium text-zinc-700" for="password">Password / Security PIN</label>
+</div>
+<div class="relative">
+<input class="w-full h-10 px-3.5 pr-10 rounded-md border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-zinc-900 transition-colors shadow-sm" id="password" name="password" placeholder="Enter password or token" required="" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute right-2.5 top-2.5 text-zinc-400 hover:text-zinc-700 focus:outline-none transition-colors" onclick="const p = document.getElementById('password'); const icon = this.querySelector('span'); if (p.type === 'password') { p.type = 'text'; icon.textContent = 'visibility_off'; } else { p.type = 'password'; icon.textContent = 'visibility'; }" type="button">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</div>
+</div>
+<!-- Role Dropdown -->
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-zinc-700" for="roleSelect">Designated Role</label>
+<div class="relative">
+<select class="w-full h-10 px-3.5 pr-8 rounded-md border border-zinc-200 bg-white text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-zinc-900 transition-colors shadow-sm appearance-none cursor-pointer" id="roleSelect" name="roleSelect" required="">
+<option disabled="" selected="" value="">Select assigned operational role</option>
+<option value="officer">Border Screening Officer</option>
+<option value="supervisor">Checkpoint Supervisor</option>
+<option value="investigator">Lead Investigator</option>
+<option value="admin">System Administrator</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-zinc-400 text-lg pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Checkpoint / Location Dropdown -->
+<div class="space-y-1.5">
+<label class="block text-xs font-medium text-zinc-700" for="checkpointSelect">Checkpoint / Location</label>
+<div class="relative">
+<select class="w-full h-10 px-3.5 pr-8 rounded-md border border-zinc-200 bg-white text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-zinc-900 transition-colors shadow-sm appearance-none cursor-pointer" id="checkpointSelect" name="checkpointSelect" required="">
+<option disabled="" selected="" value="">Select checkpoint station</option>
+<option value="nepal">Indo-Nepal Checkpoint (Raxaul)</option>
+<option value="attari">ICP Attari (Wagah)</option>
+<option value="petrapole">ICP Petrapole (West Bengal)</option>
+<option value="igi">IGI Airport T3 (New Delhi)</option>
+<option value="cst">Chhatrapati Shivaji Terminal (Mumbai)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-zinc-400 text-lg pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Forgot Password Link -->
+<div class="flex justify-end pt-1">
+<a class="text-xs text-zinc-600 hover:text-zinc-900 hover:underline underline-offset-4 transition-colors" href="#">
+  Forgot password / Request token reset?
+</a>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-10 mt-2 bg-zinc-900 text-white rounded-md text-sm font-medium hover:bg-zinc-800 active:scale-[0.99] transition duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm" type="submit">
+<span class="material-symbols-outlined text-base">login</span>
+<span>Login to Screening Portal</span>
+</button>
+</form>
+<!-- END: LoginForm -->
+</div>
+<!-- BEGIN: FooterSecurityBanner -->
+<footer class="w-full max-w-[420px] pt-4 pb-2 border-t border-zinc-100 text-center">
+<div class="inline-flex items-center justify-center gap-1.5 text-[11px] text-zinc-500 font-medium">
+<span class="material-symbols-outlined text-xs text-zinc-400">verified</span>
+<span>Secure Terminal Session</span>
+<span class="text-zinc-300">•</span>
+<span>AES-256 Encrypted</span>
+<span class="text-zinc-300">•</span>
+<span>Audit Trail Monitored</span>
+</div>
+</footer>
+<!-- END: FooterSecurityBanner -->
+</section>
+<!-- END: RightAuthContent -->
+</main>
+<!-- END: MainLayout -->
+</body></html>

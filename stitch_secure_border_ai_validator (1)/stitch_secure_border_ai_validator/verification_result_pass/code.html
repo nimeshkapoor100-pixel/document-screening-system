@@ -1,0 +1,362 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Verification Report - Sentinel Oversight</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#08132a",
+                    "primary-fixed-dim": "#b9c7e4",
+                    "surface-variant": "#2a344d",
+                    "on-tertiary-fixed-variant": "#005142",
+                    "tertiary-fixed-dim": "#38debb",
+                    "surface-container-high": "#1f2942",
+                    "surface-container": "#151f37",
+                    "on-background": "#d9e2ff",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#d6e3ff",
+                    "inverse-surface": "#d9e2ff",
+                    "on-primary-fixed": "#0d1c32",
+                    "on-secondary-fixed": "#091b39",
+                    "tertiary-container": "#001e17",
+                    "primary": "#b9c7e4",
+                    "on-tertiary-container": "#00937a",
+                    "on-secondary-container": "#a5b5db",
+                    "inverse-primary": "#515f78",
+                    "on-primary": "#233148",
+                    "surface": "#08132a",
+                    "tertiary": "#38debb",
+                    "background": "#08132a",
+                    "on-error": "#690005",
+                    "on-surface": "#d9e2ff",
+                    "error-container": "#93000a",
+                    "tertiary-fixed": "#5ffbd6",
+                    "surface-container-lowest": "#030d25",
+                    "secondary-fixed": "#d8e2ff",
+                    "surface-tint": "#b9c7e4",
+                    "outline-variant": "#44474d",
+                    "surface-bright": "#2f3952",
+                    "secondary-fixed-dim": "#b6c6ed",
+                    "error": "#ffb4ab",
+                    "surface-container-highest": "#2a344d",
+                    "primary-container": "#0a192f",
+                    "on-tertiary-fixed": "#002019",
+                    "secondary-container": "#374767",
+                    "secondary": "#b6c6ed",
+                    "outline": "#8f9097",
+                    "surface-container-low": "#101b33",
+                    "on-surface-variant": "#c5c6cd",
+                    "inverse-on-surface": "#263049",
+                    "on-primary-fixed-variant": "#39475f",
+                    "on-secondary": "#20304f",
+                    "on-primary-container": "#74829d",
+                    "on-tertiary": "#00382d",
+                    "on-secondary-fixed-variant": "#374767"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "margin": "24px",
+                    "unit": "4px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "data-mono": [
+                            "JetBrains Mono"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "headline-sm": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "data-mono": [
+                            "13px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "11px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface font-headline-sm text-headline-sm flex justify-between items-center w-full px-margin h-16 border-b border-outline-variant flat no shadows docked full-width top-0 z-50">
+<div class="flex items-center gap-margin">
+<span class="font-headline-md text-headline-md font-bold text-tertiary dark:text-tertiary-fixed">Sentinel Oversight</span>
+<nav class="hidden md:flex gap-gutter">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps py-1 cursor-pointer active:opacity-80" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-caps text-label-caps py-1 cursor-pointer active:opacity-80" href="#">Logs</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-label-caps cursor-pointer active:opacity-80" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-gutter">
+<!-- Search bar on right -->
+<div class="relative hidden lg:block">
+<input class="bg-surface-variant text-on-surface border-outline-variant rounded px-3 py-1 focus:outline-none focus:border-primary font-body-md text-body-md w-64" placeholder="Search..." type="text">
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">search</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant border border-outline-variant rounded px-2 py-1">Station ID: ALPHA-09</span>
+<div class="flex gap-unit">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80"><span class="material-symbols-outlined">security</span></button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:opacity-80">
+<img alt="Officer Profile" class="w-6 h-6 rounded-full object-cover" data-alt="A small, circular profile picture of a security officer in a dark, professional uniform, lit by cool monitor glow, fitting a high-tech UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcq_ZwXqbyQ4U6eZFrjDXj0cZZ2dcs5krCv1W0ZJn8zr6XgFlfOujU6-dutI9jT1TOgAR5tjhp-7umeF7EfDWoN2BC_HGzGZwup6iDogAKNACoDi31qQqkgzbLLWD0Snn8tO8stSN6A6Ahv2Rev7ymYd6x6wV90WdJu-GS1Kr-Ly79BD82ejah0IdiCFrnZA2DjkzBtN1aIbd6sk2xwK7itUnZjEpp7tXan7tVtx2pvOyaC-8Nrlqmsw">
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-low dark:bg-surface-container-low text-tertiary dark:text-tertiary-fixed-dim bg-surface-container-low border-r border-outline-variant flat no shadows docked left-0 h-screen w-64 flex flex-col py-6 hidden md:flex z-40">
+<div class="px-margin mb-6 flex items-center gap-3">
+<img alt="System Status" class="w-10 h-10 rounded border border-outline-variant" data-alt="A stylized, glowing geometric avatar representing an AI system status, composed of cyan and deep blue lines in a dark environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkLvZCbXRR62Pch1jjDFSalEz6RxLC336hEmsBfVXaGu77tAYDdKaGbxpOyZrweuXrWVAd38b-ShM2-eBvrd_WWsBWUPhxNjMOiXVXah3vROaW9NaZtoMoYVLJ2B0GoPPH7wMBdFmkT33rYPsZm52ML9cWW5meprPwPozo-7RIvfgX8HdJwCYTbvy6AjBIChwhVxBfh3phzcZEuOSBrozyBq1ZkSW5BpWLnftbC0asXEfq6E5yVWM9wg">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Checkpoint Beta</h2>
+<p class="font-label-caps text-label-caps text-on-surface-variant mt-1">AI Oversight Active</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 hover:bg-surface-variant transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">document_scanner</span>
+<span class="font-label-caps text-label-caps">Scan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 hover:bg-surface-variant transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">memory</span>
+<span class="font-label-caps text-label-caps">Process</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg mx-2 hover:bg-surface-variant transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-caps text-label-caps">Result</span>
+</a>
+</nav>
+<div class="px-margin mb-4">
+<button class="w-full bg-error text-on-error font-label-caps text-label-caps py-2 rounded font-bold hover:bg-red-400 transition-colors">Emergency Lock</button>
+</div>
+<div class="mt-auto border-t border-outline-variant pt-4 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 hover:bg-surface-variant transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 hover:bg-surface-variant transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-margin max-w-container-max mx-auto w-full">
+<!-- Top Banner -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-margin mb-margin flex flex-col md:flex-row items-center justify-between gap-margin relative overflow-hidden">
+<!-- Subtle glow effect for 'PASS' state -->
+<div class="absolute inset-0 bg-tertiary opacity-5 pointer-events-none"></div>
+<div class="flex items-center gap-margin z-10">
+<div class="bg-surface-variant p-4 rounded-full border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-on-surface" style="font-variation-settings: 'FILL' 0;">flight_takeoff</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="bg-surface-bright text-on-surface font-label-caps text-label-caps px-2 py-1 rounded border border-outline-variant">PASSPORT</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">DOC-ID: 998-ALPHA-77X</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary-fixed">Identity Verified</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Comprehensive data extraction and cross-referencing complete.</p>
+</div>
+</div>
+<div class="z-10 flex flex-col items-center">
+<div class="bg-tertiary-container border border-tertiary px-8 py-4 rounded-xl shadow-[0_0_15px_rgba(56,222,187,0.2)]">
+<span class="font-display-lg text-display-lg text-tertiary font-extrabold tracking-widest block text-center">PASS</span>
+</div>
+<p class="font-data-mono text-data-mono text-tertiary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        Clearance Granted
+                    </p>
+</div>
+</div>
+<!-- 3-Column Grid of Extracted Fields -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter mb-margin items-stretch">
+<!-- Card 1 -->
+<div class="bg-surface-container-high border border-outline-variant rounded shadow-[0_4px_4px_rgba(0,0,0,0.2)] hover:bg-surface-bright transition-colors group">
+<div class="border-b border-outline-variant p-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-variation-settings: 'FILL' 0;">person</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">FULL NAME</h3>
+</div>
+<div class="p-4">
+<div class="font-headline-md text-headline-md text-primary-fixed mb-2 truncate">JANE DOE</div>
+<div class="flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-mono text-data-mono">Matches Database</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-high border border-outline-variant rounded shadow-[0_4px_4px_rgba(0,0,0,0.2)] hover:bg-surface-bright transition-colors group">
+<div class="border-b border-outline-variant p-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-variation-settings: 'FILL' 0;">cake</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">DATE OF BIRTH</h3>
+</div>
+<div class="p-4">
+<div class="font-headline-md text-headline-md text-primary-fixed mb-2 truncate">1985-10-24</div>
+<div class="flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-mono text-data-mono">Valid Format</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-high border border-outline-variant rounded shadow-[0_4px_4px_rgba(0,0,0,0.2)] hover:bg-surface-bright transition-colors group">
+<div class="border-b border-outline-variant p-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-variation-settings: 'FILL' 0;">badge</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">DOCUMENT NUMBER</h3>
+</div>
+<div class="p-4">
+<div class="font-headline-md text-headline-md text-primary-fixed mb-2 truncate">AB1234567</div>
+<div class="flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-mono text-data-mono">Checksum Verified</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-high border border-outline-variant rounded shadow-[0_4px_4px_rgba(0,0,0,0.2)] hover:bg-surface-bright transition-colors group">
+<div class="border-b border-outline-variant p-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-variation-settings: 'FILL' 0;">event</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">EXPIRY DATE</h3>
+</div>
+<div class="p-4">
+<div class="font-headline-md text-headline-md text-primary-fixed mb-2 truncate">2032-05-15</div>
+<div class="flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-mono text-data-mono">Active (8 Yrs Rem.)</span>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-high border border-outline-variant rounded shadow-[0_4px_4px_rgba(0,0,0,0.2)] hover:bg-surface-bright transition-colors group">
+<div class="border-b border-outline-variant p-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-variation-settings: 'FILL' 0;">public</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">NATIONALITY</h3>
+</div>
+<div class="p-4">
+<div class="font-headline-md text-headline-md text-primary-fixed mb-2 truncate">UTOPIA (UTP)</div>
+<div class="flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-mono text-data-mono">Country Code Match</span>
+</div>
+</div>
+</div>
+<!-- Card 6 (Image extract example) -->
+<div class="bg-surface-container-high border border-outline-variant rounded shadow-[0_4px_4px_rgba(0,0,0,0.2)] hover:bg-surface-bright transition-colors group row-span-2 hidden lg:block">
+<div class="border-b border-outline-variant p-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" style="font-variation-settings: 'FILL' 0;">portrait</span>
+<h3 class="font-label-caps text-label-caps text-on-surface">FACIAL EXTRACT</h3>
+</div>
+<div class="p-margin flex flex-col items-center justify-center h-full">
+<div class="relative w-32 h-40 mb-4 border border-outline-variant rounded overflow-hidden">
+<img alt="Extracted face" class="object-cover w-full h-full grayscale opacity-80" data-alt="A tightly cropped, high-contrast black and white passport-style photo of an individual, framed within a digital scanning reticle on a dark screen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGBOIMRON7b5zd5bnQCVb77PPBwh6sjibfpI12mYev9urJfc5ZB4veVxNhdH8nYSeXgdVv22KtMpq0vMDdPpLIZij35nsdA5DX3Ka5PRrW3vXboUzs8E5fxC3VJKCliSl2KbOEPoL6BWGvRe9Lo2Ykxsf6xFDIH-fCitTOYFjg760NCYDA0PeMFKYYH609QPtgOeDLtDi_nVvql6AH5K0cGrNsiDDSFz9-rzsWSxN_ZJz3wTWd2Ix6ZQ">
+<div class="absolute inset-0 border-2 border-tertiary opacity-30 pointer-events-none"></div>
+</div>
+<div class="flex flex-col items-center gap-1 w-full text-center">
+<div class="w-full bg-surface-variant h-2 rounded-full overflow-hidden mb-1">
+<div class="bg-tertiary h-full w-[98%]"></div>
+</div>
+<span class="font-data-mono text-data-mono text-tertiary">98% Match Confidence</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="flex justify-end items-center pt-margin border-t border-outline-variant mt-margin">
+<button class="bg-transparent border border-primary text-primary hover:bg-primary hover:text-on-primary font-label-caps text-label-caps px-6 py-3 rounded transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">document_scanner</span>
+                    SCAN ANOTHER DOCUMENT
+                </button>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-dim dark:bg-surface-container-lowest text-tertiary dark:text-tertiary-fixed font-data-mono text-data-mono flex justify-between items-center px-margin py-2 w-full z-50 border-t border-outline-variant flat no shadows docked bottom-0 full-width">
+<span class="text-on-surface">© 2024 Sentinel Oversight AI</span>
+<div class="flex gap-4">
+<span class="text-on-surface-variant hover:text-on-surface">AI Engine: Online</span>
+<span class="text-on-surface-variant hover:text-on-surface">Database: Connected</span>
+<span class="text-on-surface-variant hover:text-on-surface">System Time: 14:22:01 UTC</span>
+</div>
+</footer>
+
+
+</body></html>
